@@ -1,0 +1,1 @@
+export const backendUrl = "https://forum-backend-production-bc14.up.railway.app";
