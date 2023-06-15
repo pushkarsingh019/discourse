@@ -2,8 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@layer components {
+  .header {
+    grid-area: header;
+  }
+  .main-content {
+    grid-area: main-content;
+  }
+  .menu {
+    grid-area: menu;
+    padding-inline: 15px;
+  }
+  .aside-content {
+    grid-area: aside-content;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    column-gap: 1.5rem;
+    row-gap: 1.5rem;
+    grid-template-areas: "header header header" "menu main-content aside-content";
+  }
+
+  @media screen and (max-width : 747px) {
+    .layout {
+      display: block;
+    }
+    .menu {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 0.5rem;
+      padding-inline: 1rem;
+      padding-bottom: 0.3rem;
+      background-color: #f9fafb;
+      /* border: 0.5px solid; */
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      border-radius: 4px 4px 0px 0px;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 2px 1px 0 rgba(0, 0, 0, 0.24);
+    }
+
+    .aside-content {
+      display: none;
+    }
+  }
 }
