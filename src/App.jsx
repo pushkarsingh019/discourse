@@ -6,12 +6,14 @@ import ExploreScreen from "./screens/ExploreScreen";
 import CreatePostScreen from "./screens/CreatePostScreen";
 import BookmarkScreen from "./screens/Bookmark";
 import ProfileScreen from "./screens/ProfileScreen";
+import LandingScreen from "./screens/LandingScreen";
 
 const App = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<HomeScreen />} />
+                <Route path="/" element={<LandingScreen />} />
+                <Route path="/dashboard" element={<HomeScreen />} />
                 <Route path="/explore" element={<ExploreScreen />} />
                 <Route path="/create" element={<CreatePostScreen />} />
                 <Route path="/bookmarks" element={<BookmarkScreen />} />
