@@ -7,6 +7,7 @@ export const storeContext = createContext();
 export const ContextProvider = ({children}) => {
     const [user, setUser] = useState(localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {});
     const [accessToken, setAccessToken] = useState(localStorage.getItem("access_token") ? localStorage.getItem("access_token") : undefined);
+    const [posts, setPosts] = useState([]);
 
     useEffect(() => {
         localStorage.setItem("user", JSON.stringify(user));
@@ -17,6 +18,7 @@ export const ContextProvider = ({children}) => {
     const store = {
         user : user,
         accessToken : accessToken,
+        posts : posts, 
         authReducer : async (action) => {
             switch (action.type){
                 case 'login':
@@ -47,6 +49,32 @@ export const ContextProvider = ({children}) => {
                     break;
                 default:
                     throw new Error("wrong action");
+            }
+        },
+        postReducer :  async (action) => {
+            switch (action.type) {
+                case 'create_post':
+                    try {
+                        let {data} = await axios.post(`${backendUrl}/api/post` , {post : action.data.post} , {
+                            headers : {
+                            authorization : accessToken
+                            }
+                        }, )
+                        setPosts(data.reverse());
+                    } catch (error) {
+                        console.log(error.message)
+                    }
+                    break;
+                case 'fetch_posts':
+                    try {
+                        const {data} = await axios.get(`${backendUrl}/api/post`);
+                        setPosts(data.reverse());
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    break;
+                default:
+                    break;
             }
         }
     };

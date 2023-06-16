@@ -1,30 +1,59 @@
 import Header from "../components/Header";
 import Menu from "../components/Menu";
+import CreatePost from "../components/CreatePost";
+import { useContext } from "react";
+import { storeContext } from "../utils/store";
+import { useEffect } from "react";
+import edit from "../assets/edit.svg";
+import { useNavigate } from "react-router-dom";
+import Post from "../components/Post";
 
 const HomeScreen = () => {
+    const { posts, postReducer } = useContext(storeContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        postReducer({
+            type: "fetch_posts",
+        });
+        // eslint-disable-next-line
+    }, []);
+
     return (
-        <section className="layout">
+        <section className="layout bg-gray-100">
             <Header />
             <Menu />
-            <main className="main-content">
-                <h3 className="text-4xl font-serif font-extrabold">title</h3>
-                <p className="text-lg">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                    Neque quasi reprehenderit nesciunt officia quo laborum, sint
-                    laudantium id cupiditate inventore voluptas repellat ab
-                    possimus voluptatum iusto reiciendis voluptatem explicabo
-                    dolorum autem fugit? Incidunt delectus veniam excepturi
-                    rerum saepe, eligendi natus consequatur enim iste dolorum
-                    exercitationem suscipit reiciendis porro error ipsum?
-                </p>
+            <div
+                className="bg-indigo-600 text-white fixed right-3 bottom-20 px-3.5 py-3.5 rounded-full md:hidden z-0 shadow-xl"
+                onClick={() => navigate("/create")}
+            >
+                <img src={edit} alt="new post" />
+            </div>
+            <main className="main-content px-3 pt-2">
+                <CreatePost />
+                <h2 className="text-2xl font-sans font-medium mb-3">
+                    Latest Posts
+                </h2>
+                <br />
+                {posts.map((post) => {
+                    return (
+                        <Post
+                            key={post._id}
+                            post={post.post}
+                            username={post.authorDetails.username}
+                            time={post.time}
+                        />
+                    );
+                })}
             </main>
             <div className="aside-content">
-                <p className="text-red-500">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                    Voluptas nihil laborum voluptatibus eius? Provident corrupti
-                    ullam asperiores sequi in quasi reiciendis accusamus ex,
-                    nostrum quae!
-                </p>
+                <h3 className="text-2xl">Who to follow?</h3>
+                <ul>
+                    <li>Pushkar Singh</li>
+                    <li>Pushkar Singh</li>
+                    <li>Pushkar Singh</li>
+                    <li>Pushkar Singh</li>
+                </ul>
             </div>
         </section>
     );
