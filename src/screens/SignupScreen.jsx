@@ -1,18 +1,50 @@
 import { useNavigate } from "react-router-dom";
 import openEyes from "../assets/openEye.svg";
 import closeEye from "../assets/closeEye.svg";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { storeContext } from "../utils/store";
+import { useEffect } from "react";
+
 const SignupScreen = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState({
         password: false,
         confirmPassword: false,
     });
+    const [formData, setFormData] = useState({});
+    const [message, setMessage] = useState("");
+    const { authReducer, user } = useContext(storeContext);
+
+    const signupHandler = async (event) => {
+        event.preventDefault();
+        if (formData.password === formData.confirmPassword) {
+            let response = await authReducer({
+                type: "signup",
+                data: formData,
+            });
+            setMessage(response);
+            setFormData({});
+        } else {
+            setMessage("passwords don't match");
+        }
+    };
+
+    useEffect(() => {
+        if (Object.keys(user).length !== 0) {
+            setMessage("user already logged in");
+            navigate("/home");
+        }
+        // eslint-disable-next-line
+    }, []);
+
     return (
         <section className="flex flex-col h-screen justify-center items-center bg-gray-100">
             <h1 className="text-4xl font-serif text-center">Discourse</h1>
             <br />
-            <form className="bg-white px-10 py-10 w-[325px] md:w-[500px] rounded-lg">
+            <form
+                onSubmit={signupHandler}
+                className="bg-white px-10 py-10 w-[325px] md:w-[500px] rounded-lg"
+            >
                 <h3 className="font-bold text-2xl text-center">Signup</h3>
                 <br />
                 <label htmlFor="username" className="text-sm">
@@ -24,6 +56,13 @@ const SignupScreen = () => {
                     type="text"
                     placeholder="gavin_belson"
                     required
+                    value={formData.username ? formData.username : ""}
+                    onChange={(event) =>
+                        setFormData({
+                            ...formData,
+                            username: event.target.value,
+                        })
+                    }
                 />
                 <br />
                 <br />
@@ -36,6 +75,10 @@ const SignupScreen = () => {
                     type="email"
                     placeholder="gavin@hooli.com"
                     required
+                    value={formData.email ? formData.email : ""}
+                    onChange={(event) =>
+                        setFormData({ ...formData, email: event.target.value })
+                    }
                 />
                 <br />
                 <br />
@@ -63,6 +106,13 @@ const SignupScreen = () => {
                     type={showPassword.password ? "text" : "password"}
                     placeholder="shhhh"
                     required
+                    value={formData.password ? formData.pasword : ""}
+                    onChange={(event) =>
+                        setFormData({
+                            ...formData,
+                            password: event.target.value,
+                        })
+                    }
                 />
                 <br />
                 <br />
@@ -90,10 +140,22 @@ const SignupScreen = () => {
                     type={showPassword.confirmPassword ? "text" : "password"}
                     placeholder="confirm password "
                     required
+                    value={
+                        formData.confirmPassword ? formData.confirmPassword : ""
+                    }
+                    onChange={(event) =>
+                        setFormData({
+                            ...formData,
+                            confirmPassword: event.target.value,
+                        })
+                    }
                 />
                 <br />
                 <br />
-                <button className="px-4 w-full py-2 border text-lg text-white bg-blue-700 hover:bg-blue-600 rounded-lg">
+                <button
+                    type="submit"
+                    className="px-4 w-full py-2 border text-lg text-white bg-blue-700 hover:bg-blue-600 rounded-lg"
+                >
                     Create Account
                 </button>
                 <br />
@@ -107,6 +169,8 @@ const SignupScreen = () => {
                         Login
                     </span>
                 </p>
+                <br />
+                <p className="text-center bg-red-300">{message}</p>
             </form>
         </section>
     );
