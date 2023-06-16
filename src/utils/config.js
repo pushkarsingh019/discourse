@@ -1,2 +1,1 @@
-// export const backendUrl = "https://forum-backend-production-bc14.up.railway.app";
-export const backendUrl = "http://localhost:8080"
+export const backendUrl = process.env.REACT_APP_BACKENDURL || "http://localhost:8080";
