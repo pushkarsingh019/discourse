@@ -1,9 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import openEyes from "../assets/openEye.svg";
 import closeEye from "../assets/closeEye.svg";
 import { useContext, useState } from "react";
 import { storeContext } from "../utils/store";
-import { useEffect } from "react";
 
 const SignupScreen = () => {
     const navigate = useNavigate();
@@ -13,7 +12,8 @@ const SignupScreen = () => {
     });
     const [formData, setFormData] = useState({});
     const [message, setMessage] = useState("");
-    const { authReducer, user } = useContext(storeContext);
+    const { authReducer } = useContext(storeContext);
+    const location = useLocation();
 
     const signupHandler = async (event) => {
         event.preventDefault();
@@ -22,20 +22,20 @@ const SignupScreen = () => {
                 type: "signup",
                 data: formData,
             });
-            setMessage(response);
-            setFormData({});
+            if (response.status === "success") {
+                if (location.state.from !== undefined) {
+                    navigate(location.state.from);
+                } else {
+                    navigate("/home");
+                }
+            } else {
+                setMessage(response.message);
+                setFormData({});
+            }
         } else {
             setMessage("passwords don't match");
         }
     };
-
-    useEffect(() => {
-        if (Object.keys(user).length !== 0) {
-            setMessage("user already logged in");
-            navigate("/home");
-        }
-        // eslint-disable-next-line
-    }, []);
 
     return (
         <section className="flex flex-col h-screen justify-center items-center bg-gray-100">
@@ -163,7 +163,18 @@ const SignupScreen = () => {
                 <p className="text-base text-center">
                     Already have an account ?{" "}
                     <span
-                        onClick={() => navigate(`/login`)}
+                        onClick={() =>
+                            navigate(`/login`, {
+                                state:
+                                    location.state !== null
+                                        ? {
+                                              from: {
+                                                  pathname: location.state.from,
+                                              },
+                                          }
+                                        : null,
+                            })
+                        }
                         className="text-sky-600 hover:underline hover:cursor-pointer"
                     >
                         Login

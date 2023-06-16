@@ -1,26 +1,28 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { storeContext } from "../utils/store";
-import { useEffect } from "react";
 
 const LoginScreen = () => {
     const navigate = useNavigate();
-    const { authReducer, user } = useContext(storeContext);
+    const { authReducer } = useContext(storeContext);
     const [formData, setFormData] = useState({});
     const [loginStatus, setLoginStatus] = useState();
-
-    useEffect(() => {
-        if (Object.keys(user).length !== 0) {
-            navigate("/home");
-        }
-        // eslint-disable-next-line
-    }, []);
+    const location = useLocation();
 
     const loginHandler = async (event) => {
         event.preventDefault();
-        let message = await authReducer({ type: "login", data: formData });
-        setLoginStatus(message);
-        setFormData({});
+        let response = await authReducer({ type: "login", data: formData });
+        if (response.status === "success") {
+            setFormData({});
+            if (location.state == null) {
+                navigate("/home");
+            } else {
+                navigate(location?.state?.from?.pathname);
+            }
+        } else {
+            setLoginStatus(response.message);
+            setFormData({});
+        }
     };
 
     return (
@@ -74,7 +76,13 @@ const LoginScreen = () => {
                 <p className="text-base text-center">
                     Don't have an account ?{" "}
                     <span
-                        onClick={() => navigate(`/signup`)}
+                        onClick={() =>
+                            navigate(`/signup`, {
+                                state: {
+                                    from: location?.state?.from?.pathname,
+                                },
+                            })
+                        }
                         className="text-sky-600 hover:underline hover:cursor-pointer"
                     >
                         Sign up

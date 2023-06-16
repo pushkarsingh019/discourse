@@ -25,10 +25,10 @@ export const ContextProvider = ({children}) => {
                         const {user, accessToken, message} = data;
                         setUser(user);
                         setAccessToken(accessToken);
-                        return message;
+                        return {status : "success" , message}
                     } catch (error) {
                         if(error.response.data.message){
-                            return error.response.data.message
+                            return {status : "fail", message : error.response.data.message}
                         }
                     }
                     break;
@@ -38,10 +38,10 @@ export const ContextProvider = ({children}) => {
                         const {user, accessToken, message} = data;
                         setUser(user);
                         setAccessToken(accessToken);
-                        return message;
+                        return {status : "success" , message : message}
                     } catch (error) {
                         if(error.response.data.message){
-                            return error.response.data.message
+                            return {status : "fail", message : error.response.data.message}
                         }
                     }
                     break;

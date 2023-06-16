@@ -10,14 +10,43 @@ import LandingScreen from "./screens/LandingScreen";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 
+// importing other components
+import RequiresAuth from "./utils/RequiresAuth";
+import { useContext } from "react";
+import { storeContext } from "./utils/store";
+
 const App = () => {
+    const { user } = useContext(storeContext);
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<LandingScreen />} />
-                <Route path="/home" element={<HomeScreen />} />
+                <Route
+                    path="/"
+                    element={
+                        Object.keys(user).length !== 0 ? (
+                            <HomeScreen />
+                        ) : (
+                            <LandingScreen />
+                        )
+                    }
+                />
+                <Route
+                    path="/home"
+                    element={
+                        <RequiresAuth>
+                            <HomeScreen />
+                        </RequiresAuth>
+                    }
+                />
                 <Route path="/explore" element={<ExploreScreen />} />
-                <Route path="/create" element={<CreatePostScreen />} />
+                <Route
+                    path="/create"
+                    element={
+                        <RequiresAuth>
+                            <CreatePostScreen />
+                        </RequiresAuth>
+                    }
+                />
                 <Route path="/bookmarks" element={<BookmarkScreen />} />
                 <Route path="/profile" element={<ProfileScreen />} />
                 <Route path="/login" element={<LoginScreen />} />
