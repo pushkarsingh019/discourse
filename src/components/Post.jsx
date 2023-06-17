@@ -2,21 +2,25 @@ import comment from "../assets/comment.svg";
 import like from "../assets/like.svg";
 import share from "../assets/share.svg";
 import bookmark1 from "../assets/bookmark1.svg";
+import liked from "../assets/liked.svg";
+import bookmarked from "../assets/bookmarked.svg";
 
 import { compareTime } from "../utils/compareTime";
+import { useContext } from "react";
+import { storeContext } from "../utils/store";
 
 const Post = ({
     id,
     authorDetails,
     community,
     post,
-    upvotes,
-    downvotes,
     likes,
     comments,
     time,
     username,
 }) => {
+    const { postsInteractionReducer, user } = useContext(storeContext);
+
     return (
         <div className="flex items-start mb-6 bg-white px-2 py-3 rounded-lg shadow-md">
             <img
@@ -34,14 +38,47 @@ const Post = ({
                 <div className="flex justify-between pr-6 items-center">
                     <div className="flex gap-x-1 items-center">
                         <img src={comment} alt="comments" />
-                        <p>1</p>
+                        <p>{comments.length}</p>
                     </div>
                     <div className="flex gap-x-1 items-center">
-                        <img src={like} alt="comments" />
-                        <p>1</p>
+                        <img
+                            src={
+                                likes.filter((like) => like.id === user._id)
+                                    .length > 0
+                                    ? liked
+                                    : like
+                            }
+                            alt="comments"
+                            onClick={() =>
+                                postsInteractionReducer({
+                                    type: "like",
+                                    id: id,
+                                })
+                            }
+                        />
+                        <p>{likes.length}</p>
                     </div>
                     <div className="flex gap-x-1 items-center">
-                        <img src={bookmark1} alt="comments" />
+                        <img
+                            src={
+                                user.bookmarks.filter((post) => post._id === id)
+                                    .length > 0
+                                    ? bookmarked
+                                    : bookmark1
+                            }
+                            alt="bookmarks"
+                            onClick={() =>
+                                postsInteractionReducer({
+                                    type:
+                                        user.bookmarks.filter(
+                                            (post) => post._id === id
+                                        ).length > 0
+                                            ? "remove_bookmark"
+                                            : "bookmark",
+                                    id: id,
+                                })
+                            }
+                        />
                     </div>
                     <div className="flex gap-x-1 items-center">
                         <img src={share} alt="comments" />

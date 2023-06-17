@@ -39,10 +39,15 @@ const HomeScreen = () => {
                 {posts.map((post) => {
                     return (
                         <Post
+                            id={post._id}
                             key={post._id}
                             post={post.post}
                             username={post.authorDetails.username}
                             time={post.time}
+                            likes={post.likes}
+                            community={post.community}
+                            authorDetails={post.authorDetails}
+                            comments={post.comments}
                         />
                     );
                 })}

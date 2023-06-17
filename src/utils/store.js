@@ -76,7 +76,51 @@ export const ContextProvider = ({children}) => {
                 default:
                     break;
             }
-        }
+        },
+        postsInteractionReducer  : async (action) => {
+            switch (action.type) {
+                case "like":
+                    try {
+                        let {data} = await axios.get(`${backendUrl}/api/post/like/${action.id}`, {
+                            headers : {
+                                authorization : accessToken
+                            }
+                        });
+                        setPosts(data.reverse())
+                    } catch (error) {
+                        console.log(error.message)
+                    }
+                    break;
+                case "bookmark":
+                    try {
+                        let {data} = await axios.get(`${backendUrl}/api/post/bookmark/${action.id}`, {
+                            headers : {
+                                authorization : accessToken
+                            }
+                        });
+                        setUser(data)
+                    } catch (error) {
+                        console.log(error.message)
+                    }
+                    break;
+                case "remove_bookmark":
+                    try {
+                        let {data} = await axios.delete(`${backendUrl}/api/post/bookmark/${action.id}`, {
+                            headers : {
+                                authorization : accessToken
+                            }
+                        });
+                        setUser(data);
+                    } catch (error) {
+                        console.log(error.message)
+                    }
+                    break;
+                case "comment":
+                    break;
+                default:
+                    break;
+            }
+        },
     };
 
 
