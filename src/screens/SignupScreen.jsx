@@ -23,7 +23,11 @@ const SignupScreen = () => {
                 data: formData,
             });
             if (response.status === "success") {
-                if (location.state.from !== undefined) {
+                console.log(location);
+                if (
+                    location?.state?.from !== undefined &&
+                    location?.state?.from !== null
+                ) {
                     navigate(location.state.from);
                 } else {
                     navigate("/home");
