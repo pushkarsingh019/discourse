@@ -11,7 +11,7 @@ const Menu = () => {
     const navigate = useNavigate();
     return (
         // <nav className=" menu flex justify-between items-center pb-2 pt-3 px-4 bg-gray-50 rounded-t-2xl bg-white-800 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-20 border-solid border border-black">
-        <nav className="menu shadow-sm backdrop-filter: blur(20px) bg-white">
+        <nav className="menu shadow-sm backdrop-filter: blur(20px) bg-opacity-95 bg-gray-50 ">
             <div
                 className="flex flex-col items-center md:flex-row md:px-3 md:py-3 md:bg-gray-300 md:mb-4"
                 onClick={() => navigate(`/`)}

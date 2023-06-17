@@ -31,6 +31,7 @@ const HomeScreen = () => {
             </div>
             <main className="main-content px-3 pt-2">
                 <CreatePost />
+                <br />
                 <h2 className="text-2xl font-sans font-medium mb-3">
                     Latest Posts
                 </h2>
