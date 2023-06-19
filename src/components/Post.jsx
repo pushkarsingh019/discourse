@@ -21,6 +21,25 @@ const Post = ({
 }) => {
     const { postsInteractionReducer, user } = useContext(storeContext);
 
+    const shareHandler = (event) => {
+        const { origin } = window.location;
+        if (navigator.share) {
+            navigator
+                .share({
+                    title: `post by ${authorDetails.username}`,
+                    text: post,
+                    url: `${origin}/post/${id}`,
+                })
+                .then(() => console.log("share function executed..."))
+                .catch((error) =>
+                    console.log(`error sharing : ${error.message}`)
+                );
+        } else {
+            navigator.clipboard.writeText(`${origin}/post/${id}`);
+            //TODO: add the toast to show, copy to clipboard...
+        }
+    };
+
     return (
         <div className="flex items-start mb-6 bg-white px-2 py-3 rounded-lg shadow-md">
             <img
@@ -80,7 +99,10 @@ const Post = ({
                             }
                         />
                     </div>
-                    <div className="flex gap-x-1 items-center">
+                    <div
+                        onClick={shareHandler}
+                        className="flex gap-x-1 items-center"
+                    >
                         <img src={share} alt="comments" />
                     </div>
                 </div>

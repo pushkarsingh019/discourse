@@ -9,11 +9,13 @@ import ProfileScreen from "./screens/ProfileScreen";
 import LandingScreen from "./screens/LandingScreen";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
+import ErrorScreen from "./screens/ErrorScreen";
 
 // importing other components
 import RequiresAuth from "./utils/RequiresAuth";
 import { useContext } from "react";
 import { storeContext } from "./utils/store";
+import PostScreen from "./screens/PostScreen";
 
 const App = () => {
     const { user } = useContext(storeContext);
@@ -51,7 +53,8 @@ const App = () => {
                 <Route path="/profile" element={<ProfileScreen />} />
                 <Route path="/login" element={<LoginScreen />} />
                 <Route path="/signup" element={<SignupScreen />} />
-                <Route path="*" element={<h3>something is wrong</h3>} />
+                <Route path="/post/:id" element={<PostScreen />} />
+                <Route path="*" element={<ErrorScreen />} />
             </Routes>
         </BrowserRouter>
     );
