@@ -15,4 +15,15 @@ export const compareTime = (providedDate) => {
       return `${days} day${days !== 1 ? 's' : ''} ago`;
     }
   };
-  
+
+export const getDate = (time) => {
+  const dateObj = new Date(time);
+  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  return dateObj.toLocaleDateString('en-US', options);
+};
+
+export const formatTime = (time) => {
+  const dateObj = new Date(time);
+  const options = { hour: 'numeric', minute: '2-digit', hour12: true };
+  return dateObj.toLocaleTimeString('en-US', options);
+};

@@ -8,6 +8,7 @@ import bookmarked from "../assets/bookmarked.svg";
 import { compareTime } from "../utils/compareTime";
 import { useContext } from "react";
 import { storeContext } from "../utils/store";
+import { useNavigate } from "react-router-dom";
 
 const Post = ({
     id,
@@ -20,7 +21,7 @@ const Post = ({
     username,
 }) => {
     const { postsInteractionReducer, user } = useContext(storeContext);
-
+    const navigate = useNavigate();
     const shareHandler = (event) => {
         const { origin } = window.location;
         if (navigator.share) {
@@ -53,7 +54,12 @@ const Post = ({
                     <div className="text-gray-600">@{username}</div>
                     <div className="text-sm">{compareTime(time)}</div>
                 </div>
-                <p className="text-base md:text-lg mb-6">{post}</p>
+                <p
+                    onClick={() => navigate(`/post/${id}`)}
+                    className="text-base md:text-lg mb-6"
+                >
+                    {post}
+                </p>
                 <div className="flex justify-between pr-6 items-center">
                     <div className="flex gap-x-1 items-center">
                         <img src={comment} alt="comments" />
