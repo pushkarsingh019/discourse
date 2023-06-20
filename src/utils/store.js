@@ -91,6 +91,7 @@ export const ContextProvider = ({children}) => {
         postsInteractionReducer  : async (action) => {
             switch (action.type) {
                 case "like":
+                    console.log("like????")
                     try {
                         let {data} = await axios.get(`${backendUrl}/api/post/like/${action.id}`, {
                             headers : {

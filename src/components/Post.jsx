@@ -66,6 +66,9 @@ const Post = ({
                         <p>{comments.length}</p>
                     </div>
                     <div className="flex gap-x-1 items-center">
+                        {console.log(
+                            likes.filter((like) => like.id === user._id)
+                        )}
                         <img
                             src={
                                 likes.filter((like) => like.id === user._id)

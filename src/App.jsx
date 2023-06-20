@@ -49,7 +49,14 @@ const App = () => {
                         </RequiresAuth>
                     }
                 />
-                <Route path="/bookmarks" element={<BookmarkScreen />} />
+                <Route
+                    path="/bookmarks"
+                    element={
+                        <RequiresAuth>
+                            <BookmarkScreen />
+                        </RequiresAuth>
+                    }
+                />
                 <Route path="/profile" element={<ProfileScreen />} />
                 <Route path="/login" element={<LoginScreen />} />
                 <Route path="/signup" element={<SignupScreen />} />

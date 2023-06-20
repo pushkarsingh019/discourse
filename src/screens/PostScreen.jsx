@@ -20,7 +20,7 @@ import { useEffect } from "react";
 
 const PostScreen = () => {
     const { id } = useParams();
-    const { postsInteractionReducer, user, postToShow, postReducer } =
+    const { postsInteractionReducer, user, postToShow, postReducer, posts } =
         useContext(storeContext);
     const { _id, authorDetails, post, likes, comments, time } = postToShow;
     const navigate = useNavigate();
@@ -35,7 +35,7 @@ const PostScreen = () => {
             []
         );
         // eslint-disable-next-line
-    }, []);
+    }, [posts]);
     if (Object.keys(postToShow).length === 0) {
         return <ErrorScreen />;
     } else {
@@ -121,7 +121,7 @@ const PostScreen = () => {
                                         ? liked
                                         : like
                                 }
-                                alt="comments"
+                                alt="like"
                                 onClick={() =>
                                     postsInteractionReducer({
                                         type: "like",
