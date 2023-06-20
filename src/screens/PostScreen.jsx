@@ -24,7 +24,6 @@ const PostScreen = () => {
         useContext(storeContext);
     const { _id, authorDetails, post, likes, comments, time } = postToShow;
     const navigate = useNavigate();
-    console.log(postToShow);
 
     useEffect(() => {
         postReducer(

@@ -76,7 +76,6 @@ export const ContextProvider = ({children}) => {
                     }
                     break;
                 case 'get_post':
-                    console.log("getting posts...")
                     try {
                         const {data} = await axios.get(`${backendUrl}/api/post/${action.id}`);
                         setPost(data);
