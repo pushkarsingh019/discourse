@@ -133,6 +133,16 @@ export const ContextProvider = ({children}) => {
                     break;
             }
         },
+        profileReducer : async (action) => {
+            switch (action.type){
+                case 'logout':
+                    setUser({});
+                    setAccessToken();
+                    break;
+                default:
+                    console.log('default profile reducer...')
+            }
+        }
     };
 
 

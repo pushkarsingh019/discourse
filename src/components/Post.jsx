@@ -42,7 +42,7 @@ const Post = ({
     };
 
     return (
-        <div className="flex items-start mb-6 bg-white px-2 py-3 rounded-lg shadow-md">
+        <div className="flex items-start mb-6 bg-white px-2 py-3 rounded-xl  border md:shadow-sm">
             <img
                 src="https://avatars.githubusercontent.com/u/94926273?v=4"
                 alt="pushkar singh"
