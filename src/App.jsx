@@ -57,7 +57,14 @@ const App = () => {
                         </RequiresAuth>
                     }
                 />
-                <Route path="/profile" element={<ProfileScreen />} />
+                <Route
+                    path="/profile"
+                    element={
+                        <RequiresAuth>
+                            <ProfileScreen />
+                        </RequiresAuth>
+                    }
+                />
                 <Route path="/login" element={<LoginScreen />} />
                 <Route path="/signup" element={<SignupScreen />} />
                 <Route path="/post/:id" element={<PostScreen />} />
