@@ -69,9 +69,6 @@ const Post = ({
                         <p>{comments.length}</p>
                     </div>
                     <div className="flex gap-x-1 items-center">
-                        {console.log(
-                            likes.filter((like) => like.id === user._id)
-                        )}
                         <img
                             src={
                                 likes.filter((like) => like.id === user._id)
@@ -89,28 +86,33 @@ const Post = ({
                         />
                         <p>{likes.length}</p>
                     </div>
-                    <div className="flex gap-x-1 items-center">
-                        <img
-                            src={
-                                user.bookmarks.filter((post) => post._id === id)
-                                    .length > 0
-                                    ? bookmarked
-                                    : bookmark1
-                            }
-                            alt="bookmarks"
-                            onClick={() =>
-                                postsInteractionReducer({
-                                    type:
-                                        user.bookmarks.filter(
-                                            (post) => post._id === id
-                                        ).length > 0
-                                            ? "remove_bookmark"
-                                            : "bookmark",
-                                    id: id,
-                                })
-                            }
-                        />
-                    </div>
+                    {Object.keys(user).length !== 0 ? (
+                        <div className="flex gap-x-1 items-center">
+                            <img
+                                src={
+                                    user.bookmarks.filter(
+                                        (post) => post._id === id
+                                    ).length > 0
+                                        ? bookmarked
+                                        : bookmark1
+                                }
+                                alt="bookmarks"
+                                onClick={() =>
+                                    postsInteractionReducer({
+                                        type:
+                                            user.bookmarks.filter(
+                                                (post) => post._id === id
+                                            ).length > 0
+                                                ? "remove_bookmark"
+                                                : "bookmark",
+                                        id: id,
+                                    })
+                                }
+                            />
+                        </div>
+                    ) : (
+                        ""
+                    )}
                     <div
                         onClick={shareHandler}
                         className="flex gap-x-1 items-center"

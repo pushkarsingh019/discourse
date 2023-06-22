@@ -38,7 +38,6 @@ export const ContextProvider = ({children}) => {
                     break;
                 case 'signup':
                     try {
-                        console.log(action.data);
                         const {data} = await axios.post(`${backendUrl}/api/signup`, {username : action.data.username, email : action.data.email, password  : action.data.password, name : action.data.name});
                         const {user, accessToken, message} = data;
                         setUser(user);
@@ -77,7 +76,6 @@ export const ContextProvider = ({children}) => {
                     }
                     break;
                 case 'get_post':
-                    console.log("getting posts...")
                     try {
                         const {data} = await axios.get(`${backendUrl}/api/post/${action.id}`);
                         setPost(data);
@@ -92,7 +90,6 @@ export const ContextProvider = ({children}) => {
         postsInteractionReducer  : async (action) => {
             switch (action.type) {
                 case "like":
-                    console.log("like????")
                     try {
                         let {data} = await axios.get(`${backendUrl}/api/post/like/${action.id}`, {
                             headers : {
@@ -147,7 +144,7 @@ export const ContextProvider = ({children}) => {
                     } catch (error) {
                         console.log(error.message)
                     }
-                    break;
+                    break; 
                 case 'update_profile':
                     try {
                         const {data} = await axios.put(`${backendUrl}/api/user/${action.id}` , {

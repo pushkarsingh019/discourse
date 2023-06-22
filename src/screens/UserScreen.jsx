@@ -1,28 +1,56 @@
+//TODO : This screen is a fork of the profile screen with some changes, we can probably make a more intelligent component, and have it repurposed here, but in the interest of time, here we go.
+import axios from "axios";
+import { useState } from "react";
 import { useContext } from "react";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { backendUrl } from "../utils/config";
+import { storeContext } from "../utils/store";
+import FloatingCreateButton from "../components/FloatingCreateButton";
 import Header from "../components/Header";
 import Menu from "../components/Menu";
-import { storeContext } from "../utils/store";
 import Post from "../components/Post";
-import FloatingCreateButton from "../components/FloatingCreateButton";
-import { useNavigate } from "react-router-dom";
-import MobileTopBar from "../components/MobileTopBar";
-import { useEffect } from "react";
+import ErrorScreen from "./ErrorScreen";
 
-const ProfileScreen = () => {
-    const { profileReducer, user, posts, postReducer } =
-        useContext(storeContext);
-    const navigate = useNavigate();
+const UserScreen = () => {
+    const { userId } = useParams();
+    const [user, setUser] = useState();
+    const [loading, setLoading] = useState(false);
+    const { posts, postReducer } = useContext(storeContext);
 
-    const editProfileHandler = () => {
-        navigate(`/settings/edit-profile`, { state: { userId: user._id } });
+    const fetchUserData = async () => {
+        setLoading(true);
+        try {
+            let { data } = await axios.get(
+                `${backendUrl}/api/profile/${userId}`
+            );
+            setUser(data);
+        } catch (error) {
+            console.log(error.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
+        fetchUserData();
         postReducer({
             type: "fetch_posts",
         });
         // eslint-disable-next-line
     }, []);
+
+    if (loading === true) {
+        return (
+            <div className="flex h-screen justify-center items-center">
+                <p className="text-2xl">loading...</p>
+            </div>
+        );
+    }
+
+    if (user === undefined) {
+        return <ErrorScreen />;
+    }
 
     return (
         <section className="layout">
@@ -30,10 +58,8 @@ const ProfileScreen = () => {
             <Menu />
             <FloatingCreateButton />
             <main className="main-content">
-                <MobileTopBar text={`Profile`} />
-                <div className="px-4 my-6">
-                    {/* the profile icon and the name -- cta buttons */}
-                    <div className="flex gap-x-5 items-stretch md:flex-col md:items-center md:text-center md:gap-y-3">
+                <div className="px-6 my-6">
+                    <div className="flex gap-x-5 items-center md:flex-col md:items-center md:text-center md:gap-y-3">
                         <img
                             src="https://avatars.githubusercontent.com/u/94926273?v=4"
                             alt="avatar"
@@ -45,19 +71,8 @@ const ProfileScreen = () => {
                                     {user.name}
                                 </p>
                             </div>
-                            <button
-                                onClick={editProfileHandler}
-                                className="border hover:bg-gray-100 px-3 py-1 rounded-md text-sm font-medium md:px-5 md:py-1 md:text-base mr-3"
-                            >
-                                edit profile
-                            </button>
-                            <button
-                                onClick={() =>
-                                    profileReducer({ type: "logout" })
-                                }
-                                className="border hover:bg-gray-100 border-gray-300 px-3 py-1 rounded-md text-sm font-medium md:px-5 md:py-1 md:text-base"
-                            >
-                                logout
+                            <button className="border bg-zinc-900 text-white px-3 py-1.5 rounded-md text-sm font-medium md:px-5 md:py-1.5 md:text-base mr-3">
+                                follow
                             </button>
                         </div>
                     </div>
@@ -102,7 +117,6 @@ const ProfileScreen = () => {
                     </div>
                     <br />
                     <p className="text-lg font-medium mb-2">Posts</p>
-                    {/* TODO : checking posts by mapping over all the posts on the platform is a shit way to do this, updtate the server.js file */}
                     {posts.filter(
                         (post) => post.authorDetails.id === user._id
                     ) === 0 ? (
@@ -143,4 +157,4 @@ const ProfileScreen = () => {
     );
 };
 
-export default ProfileScreen;
+export default UserScreen;

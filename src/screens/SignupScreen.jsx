@@ -23,7 +23,6 @@ const SignupScreen = () => {
                 data: formData,
             });
             if (response.status === "success") {
-                console.log(location);
                 if (
                     location?.state?.from !== undefined &&
                     location?.state?.from !== null
