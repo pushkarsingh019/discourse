@@ -19,6 +19,7 @@ const Post = ({
     comments,
     time,
     username,
+    name,
 }) => {
     const { postsInteractionReducer, user } = useContext(storeContext);
     const navigate = useNavigate();
@@ -49,9 +50,11 @@ const Post = ({
                 className="w-10 h-auto object-contain rounded-full mr-3 md:w-11"
             />
             <div className="flex flex-col justify-between w-full">
-                <div className="flex gap-x-2 items-center mb-4 md:mb-5">
-                    <div className="text-base font-medium">Pushkar Singh</div>
-                    <div className="text-gray-600">@{username}</div>
+                <div className="flex gap-x-4 items-center mb-4 md:mb-5">
+                    {/* <div className="text-base font-medium">{name}</div> */}
+                    <div className="text-base md:text-lg font-medium">
+                        @{username}
+                    </div>
                     <div className="text-sm">{compareTime(time)}</div>
                 </div>
                 <p

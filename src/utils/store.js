@@ -139,6 +139,30 @@ export const ContextProvider = ({children}) => {
                     setUser({});
                     setAccessToken();
                     break;
+                case 'get_profile':
+                    try {
+                        const {data} = await axios.get(`${backendUrl}/api/user/${action.userId}`);
+                        setUser(data);
+                    } catch (error) {
+                        console.log(error.message)
+                    }
+                    break;
+                case 'update_profile':
+                    try {
+                        const {data} = await axios.put(`${backendUrl}/api/user/${action.id}` , {
+                            name : action.data.name,
+                            username : action.data.username,
+                            bio : action.data.bio
+                        }, {
+                            headers : {
+                                authorization : accessToken
+                            }
+                        });
+                        setUser(data)
+                    } catch (error) {
+                        console.log(error.message)
+                    }
+                    break;
                 default:
                     console.log('default profile reducer...')
             }

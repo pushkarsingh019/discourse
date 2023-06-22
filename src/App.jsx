@@ -16,6 +16,7 @@ import RequiresAuth from "./utils/RequiresAuth";
 import { useContext } from "react";
 import { storeContext } from "./utils/store";
 import PostScreen from "./screens/PostScreen";
+import EditProfile from "./screens/EditProfile";
 
 const App = () => {
     const { user } = useContext(storeContext);
@@ -62,6 +63,14 @@ const App = () => {
                     element={
                         <RequiresAuth>
                             <ProfileScreen />
+                        </RequiresAuth>
+                    }
+                />
+                <Route
+                    path="/settings/edit-profile"
+                    element={
+                        <RequiresAuth>
+                            <EditProfile />
                         </RequiresAuth>
                     }
                 />

@@ -4,18 +4,32 @@ import Menu from "../components/Menu";
 import { storeContext } from "../utils/store";
 import Post from "../components/Post";
 import FloatingCreateButton from "../components/FloatingCreateButton";
+import { useNavigate } from "react-router-dom";
+import MobileTopBar from "../components/MobileTopBar";
+import { useEffect } from "react";
 
 const ProfileScreen = () => {
-    const { profileReducer, user, posts } = useContext(storeContext);
+    const { profileReducer, user, posts, postReducer } =
+        useContext(storeContext);
+    const navigate = useNavigate();
+
+    const editProfileHandler = () => {
+        navigate(`/settings/edit-profile`, { state: { userId: user._id } });
+    };
+
+    useEffect(() => {
+        postReducer({
+            type: "fetch_posts",
+        });
+        // eslint-disable-next-line
+    }, []);
     return (
         <section className="layout">
             <Header />
             <Menu />
             <FloatingCreateButton />
             <main className="main-content">
-                <div className=" px-4 py-2 shadow-md font-medium backdrop-filter: blur(20px) bg-opacity-95 bg-gray-50 md:hidden ">
-                    <p className="text-center text-base">profile</p>
-                </div>
+                <MobileTopBar text={`Profile`} />
                 <div className="px-4 my-6">
                     {/* the profile icon and the name -- cta buttons */}
                     <div className="flex gap-x-5 items-stretch">
@@ -28,7 +42,10 @@ const ProfileScreen = () => {
                             <p className="text-xl md:text-2xl font-medium mb-2">
                                 {user.username}
                             </p>
-                            <button className="bg-gray-100 px-3 py-1 rounded-md text-sm md:px-5 md:py-1.5 md:text-base mr-3">
+                            <button
+                                onClick={editProfileHandler}
+                                className="bg-gray-100 px-3 py-1 rounded-md text-sm md:px-5 md:py-1.5 md:text-base mr-3"
+                            >
                                 edit profile
                             </button>
                             <button
