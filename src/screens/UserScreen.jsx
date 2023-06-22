@@ -14,9 +14,10 @@ import ErrorScreen from "./ErrorScreen";
 
 const UserScreen = () => {
     const { userId } = useParams();
-    const [user, setUser] = useState();
+    const [profile, setProfile] = useState();
     const [loading, setLoading] = useState(false);
-    const { posts, postReducer } = useContext(storeContext);
+    const { posts, postReducer, profileReducer, user } =
+        useContext(storeContext);
 
     const fetchUserData = async () => {
         setLoading(true);
@@ -24,7 +25,7 @@ const UserScreen = () => {
             let { data } = await axios.get(
                 `${backendUrl}/api/profile/${userId}`
             );
-            setUser(data);
+            setProfile(data);
         } catch (error) {
             console.log(error.message);
         } finally {
@@ -32,7 +33,24 @@ const UserScreen = () => {
         }
     };
 
+    const followHandler = () => {
+        profileReducer({
+            type: "follow",
+            id: profile._id,
+        });
+        fetchUserData();
+    };
+
+    const unFollowHandler = () => {
+        profileReducer({
+            type: "unfollow",
+            id: profile._id,
+        });
+        fetchUserData();
+    };
+
     useEffect(() => {
+        // TODO : the state of the user does not update immediately...
         fetchUserData();
         postReducer({
             type: "fetch_posts",
@@ -48,7 +66,7 @@ const UserScreen = () => {
         );
     }
 
-    if (user === undefined) {
+    if (profile === undefined) {
         return <ErrorScreen />;
     }
 
@@ -68,21 +86,51 @@ const UserScreen = () => {
                         <div>
                             <div>
                                 <p className="text-xl md:text-3xl font-medium my-2">
-                                    {user.name}
+                                    {profile.name}
                                 </p>
                             </div>
-                            <button className="border bg-zinc-900 text-white px-3 py-1.5 rounded-md text-sm font-medium md:px-5 md:py-1.5 md:text-base mr-3">
-                                follow
-                            </button>
+                            {Object.keys(user).length === 0 ? (
+                                <button
+                                    onClick={followHandler}
+                                    className="border bg-zinc-900 text-white px-3 py-1.5 rounded-md text-sm font-medium md:px-5 md:py-1.5 md:text-base mr-3"
+                                >
+                                    follow
+                                </button>
+                            ) : profile ? (
+                                profile.followers.findIndex(
+                                    (follower) => follower._id === user._id
+                                ) !== -1 ? (
+                                    <button
+                                        onClick={unFollowHandler}
+                                        className="border px-3 py-1.5 rounded-md text-sm font-medium md:px-5 md:py-1.5 md:text-base mr-3"
+                                    >
+                                        unfollow
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={followHandler}
+                                        className="border bg-zinc-900 text-white px-3 py-1.5 rounded-md text-sm font-medium md:px-5 md:py-1.5 md:text-base mr-3"
+                                    >
+                                        follow
+                                    </button>
+                                )
+                            ) : (
+                                <button
+                                    onClick={followHandler}
+                                    className="border bg-zinc-900 text-white px-3 py-1.5 rounded-md text-sm font-medium md:px-5 md:py-1.5 md:text-base mr-3"
+                                >
+                                    follow
+                                </button>
+                            )}
                         </div>
                     </div>
                     <br />
                     <div>
                         <p className="text-lg md:text-xl font-medium md:hidden">
-                            {user.username}
+                            {profile.username}
                         </p>
                         <p className="text-base md:text-center md:px-4">
-                            {user.bio}
+                            {profile.bio}
                         </p>
                     </div>
                     <br />
@@ -92,7 +140,8 @@ const UserScreen = () => {
                                 {
                                     posts.filter(
                                         (post) =>
-                                            post.authorDetails.id === user._id
+                                            post.authorDetails.id ===
+                                            profile._id
                                     ).length
                                 }
                             </p>
@@ -102,7 +151,7 @@ const UserScreen = () => {
                         </div>
                         <div className="flex gap-x-1 items-center">
                             <p className="text-md font-semibold md:text-lg">
-                                {user.followers.length}
+                                {profile.followers.length}
                             </p>
                             <p className="text-md text-gray-600 md:text-lg">
                                 Followers
@@ -110,7 +159,7 @@ const UserScreen = () => {
                         </div>
                         <div className="flex gap-x-1 items-center md:text-lg">
                             <p className="text-md font-semibold md:text-lg">
-                                {user.follows.length}
+                                {profile.follows.length}
                             </p>
                             <p className="text-md text-gray-600">Following</p>
                         </div>
@@ -118,13 +167,13 @@ const UserScreen = () => {
                     <br />
                     <p className="text-lg font-medium mb-2">Posts</p>
                     {posts.filter(
-                        (post) => post.authorDetails.id === user._id
+                        (post) => post.authorDetails.id === profile._id
                     ) === 0 ? (
                         <p>no posts yet</p>
                     ) : (
                         posts
                             .filter(
-                                (post) => post.authorDetails.id === user._id
+                                (post) => post.authorDetails.id === profile._id
                             )
                             .map((post) => {
                                 return (

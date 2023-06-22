@@ -161,6 +161,40 @@ export const ContextProvider = ({children}) => {
                         console.log(error.message)
                     }
                     break;
+                case 'follow':
+                    if(Object.keys(user).length === 0){
+                        console.log("log in first...")
+                    }
+                    else{
+                        try {
+                            const {data} = await axios.get(`${backendUrl}/api/user/follow/${action.id}`, {
+                                headers : {
+                                    authorization : accessToken
+                                }
+                            });
+                            setUser(data);
+                        } catch (error) {
+                            console.log(error.message)
+                        }
+                    }
+                    break;
+                    case 'unfollow':
+                        if(Object.keys(user).length === 0){
+                            console.log("log in first...")
+                        }
+                        else{
+                            try {
+                                const {data} = await axios.delete(`${backendUrl}/api/user/follow/${action.id}`, {
+                                    headers : {
+                                        authorization : accessToken
+                                    }
+                                });
+                                setUser(data);
+                            } catch (error) {
+                                console.log(error.message)
+                            }
+                        }
+                        break;
                 default:
                     console.log('default profile reducer...')
             }
