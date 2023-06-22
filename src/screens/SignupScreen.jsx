@@ -23,7 +23,6 @@ const SignupScreen = () => {
                 data: formData,
             });
             if (response.status === "success") {
-                console.log(location);
                 if (
                     location?.state?.from !== undefined &&
                     location?.state?.from !== null
@@ -43,13 +42,30 @@ const SignupScreen = () => {
 
     return (
         <section className="flex flex-col h-screen justify-center items-center bg-gray-100">
-            <h1 className="text-4xl font-serif text-center">Discourse</h1>
-            <br />
             <form
                 onSubmit={signupHandler}
                 className="bg-white px-10 py-10 w-[325px] md:w-[500px] rounded-lg"
             >
                 <h3 className="font-bold text-2xl text-center">Signup</h3>
+                <br />
+                <label htmlFor="username" className="text-sm">
+                    Name
+                </label>
+                <br />
+                <input
+                    className="py-2 px-1 w-full outline-none border-2 text-base"
+                    type="text"
+                    placeholder="Gavin Belson"
+                    required
+                    value={formData.name ? formData.name : ""}
+                    onChange={(event) =>
+                        setFormData({
+                            ...formData,
+                            name: event.target.value,
+                        })
+                    }
+                />
+                <br />
                 <br />
                 <label htmlFor="username" className="text-sm">
                     Username
@@ -91,7 +107,7 @@ const SignupScreen = () => {
                         Password
                     </label>
                     <img
-                        src={showPassword.password ? closeEye : openEyes}
+                        src={showPassword.password ? openEyes : closeEye}
                         alt={
                             showPassword.password
                                 ? "hide password"
@@ -125,7 +141,7 @@ const SignupScreen = () => {
                         Confirm Password
                     </label>
                     <img
-                        src={showPassword.confirmPassword ? closeEye : openEyes}
+                        src={showPassword.confirmPassword ? openEyes : closeEye}
                         alt={
                             showPassword.confirmPassword
                                 ? "hide password"
@@ -184,7 +200,6 @@ const SignupScreen = () => {
                         Login
                     </span>
                 </p>
-                <br />
                 <p className="text-center bg-red-300">{message}</p>
             </form>
         </section>

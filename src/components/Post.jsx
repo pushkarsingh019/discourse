@@ -19,6 +19,7 @@ const Post = ({
     comments,
     time,
     username,
+    name,
 }) => {
     const { postsInteractionReducer, user } = useContext(storeContext);
     const navigate = useNavigate();
@@ -42,16 +43,18 @@ const Post = ({
     };
 
     return (
-        <div className="flex items-start mb-6 bg-white px-2 py-3 rounded-lg shadow-md">
+        <div className="flex items-start mb-6 bg-white px-2 py-3 rounded-xl  border md:shadow-sm">
             <img
                 src="https://avatars.githubusercontent.com/u/94926273?v=4"
                 alt="pushkar singh"
                 className="w-10 h-auto object-contain rounded-full mr-3 md:w-11"
             />
             <div className="flex flex-col justify-between w-full">
-                <div className="flex gap-x-2 items-center mb-4 md:mb-5">
-                    <div className="text-base font-medium">Pushkar Singh</div>
-                    <div className="text-gray-600">@{username}</div>
+                <div className="flex gap-x-4 items-center mb-4 md:mb-5">
+                    {/* <div className="text-base font-medium">{name}</div> */}
+                    <div className="text-base md:text-lg font-medium">
+                        @{username}
+                    </div>
                     <div className="text-sm">{compareTime(time)}</div>
                 </div>
                 <p
@@ -66,9 +69,6 @@ const Post = ({
                         <p>{comments.length}</p>
                     </div>
                     <div className="flex gap-x-1 items-center">
-                        {console.log(
-                            likes.filter((like) => like.id === user._id)
-                        )}
                         <img
                             src={
                                 likes.filter((like) => like.id === user._id)
@@ -86,28 +86,33 @@ const Post = ({
                         />
                         <p>{likes.length}</p>
                     </div>
-                    <div className="flex gap-x-1 items-center">
-                        <img
-                            src={
-                                user.bookmarks.filter((post) => post._id === id)
-                                    .length > 0
-                                    ? bookmarked
-                                    : bookmark1
-                            }
-                            alt="bookmarks"
-                            onClick={() =>
-                                postsInteractionReducer({
-                                    type:
-                                        user.bookmarks.filter(
-                                            (post) => post._id === id
-                                        ).length > 0
-                                            ? "remove_bookmark"
-                                            : "bookmark",
-                                    id: id,
-                                })
-                            }
-                        />
-                    </div>
+                    {Object.keys(user).length !== 0 ? (
+                        <div className="flex gap-x-1 items-center">
+                            <img
+                                src={
+                                    user.bookmarks.filter(
+                                        (post) => post._id === id
+                                    ).length > 0
+                                        ? bookmarked
+                                        : bookmark1
+                                }
+                                alt="bookmarks"
+                                onClick={() =>
+                                    postsInteractionReducer({
+                                        type:
+                                            user.bookmarks.filter(
+                                                (post) => post._id === id
+                                            ).length > 0
+                                                ? "remove_bookmark"
+                                                : "bookmark",
+                                        id: id,
+                                    })
+                                }
+                            />
+                        </div>
+                    ) : (
+                        ""
+                    )}
                     <div
                         onClick={shareHandler}
                         className="flex gap-x-1 items-center"

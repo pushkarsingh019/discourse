@@ -6,9 +6,12 @@ import explore from "../assets/explore.svg";
 import create from "../assets/create.svg";
 import bookmarks from "../assets/bookmark.svg";
 import profile from "../assets/profileBlack.svg";
+import { useContext } from "react";
+import { storeContext } from "../utils/store";
 
 const Menu = () => {
     const navigate = useNavigate();
+    const { user } = useContext(storeContext);
     return (
         // <nav className=" menu flex justify-between items-center pb-2 pt-3 px-4 bg-gray-50 rounded-t-2xl bg-white-800 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-20 border-solid border border-black">
         <nav className="menu shadow-sm backdrop-filter: blur(20px) bg-opacity-95 bg-gray-50 ">
@@ -45,7 +48,9 @@ const Menu = () => {
                 onClick={() => navigate(`/profile`)}
             >
                 <img src={profile} alt="profile" />
-                <small>profile</small>
+                <small>
+                    {Object.keys(user).length === 0 ? "profile" : user.username}
+                </small>
             </div>
         </nav>
     );
