@@ -38,7 +38,8 @@ export const ContextProvider = ({children}) => {
                     break;
                 case 'signup':
                     try {
-                        const {data} = await axios.post(`${backendUrl}/api/signup`, {username : action.data.username, email : action.data.email, password  : action.data.password});
+                        console.log(action.data);
+                        const {data} = await axios.post(`${backendUrl}/api/signup`, {username : action.data.username, email : action.data.email, password  : action.data.password, name : action.data.name});
                         const {user, accessToken, message} = data;
                         setUser(user);
                         setAccessToken(accessToken);

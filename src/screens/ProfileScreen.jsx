@@ -39,9 +39,11 @@ const ProfileScreen = () => {
                             className="w-16 h-16 md:w-20 md:h-20 object-contain rounded-full"
                         />
                         <div>
-                            <p className="text-xl md:text-2xl font-medium mb-2">
-                                {user.username}
-                            </p>
+                            <div>
+                                <p className="text-xl md:text-2xl font-medium mb-2">
+                                    {user.name}
+                                </p>
+                            </div>
                             <button
                                 onClick={editProfileHandler}
                                 className="bg-gray-100 px-3 py-1 rounded-md text-sm md:px-5 md:py-1.5 md:text-base mr-3"
@@ -60,6 +62,7 @@ const ProfileScreen = () => {
                     </div>
                     <br />
                     <div>
+                        <p className="text-lg md:text-xl">{user.username}</p>
                         <p className="text-base">{user.bio}</p>
                     </div>
                     <br />
