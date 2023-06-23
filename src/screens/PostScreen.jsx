@@ -20,7 +20,7 @@ import { useEffect } from "react";
 
 const PostScreen = () => {
     const { id } = useParams();
-    const { postsInteractionReducer, user, postToShow, postReducer } =
+    const { postsInteractionReducer, user, postToShow, postReducer, posts } =
         useContext(storeContext);
     const { _id, authorDetails, post, likes, comments, time } = postToShow;
     const navigate = useNavigate();
@@ -34,7 +34,7 @@ const PostScreen = () => {
             []
         );
         // eslint-disable-next-line
-    }, []);
+    }, [posts]);
     if (Object.keys(postToShow).length === 0) {
         return <ErrorScreen />;
     } else {
@@ -120,7 +120,7 @@ const PostScreen = () => {
                                         ? liked
                                         : like
                                 }
-                                alt="comments"
+                                alt="like"
                                 onClick={() =>
                                     postsInteractionReducer({
                                         type: "like",
@@ -130,29 +130,33 @@ const PostScreen = () => {
                             />
                             <p>{likes.length}</p>
                         </div>
-                        <div className="flex gap-x-1 items-center">
-                            <img
-                                src={
-                                    user.bookmarks.filter(
-                                        (post) => post._id === id
-                                    ).length > 0
-                                        ? bookmarked
-                                        : bookmark1
-                                }
-                                alt="bookmarks"
-                                onClick={() =>
-                                    postsInteractionReducer({
-                                        type:
-                                            user.bookmarks.filter(
-                                                (post) => post._id === id
-                                            ).length > 0
-                                                ? "remove_bookmark"
-                                                : "bookmark",
-                                        id: id,
-                                    })
-                                }
-                            />
-                        </div>
+                        {Object.keys(user).length !== 0 ? (
+                            <div className="flex gap-x-1 items-center">
+                                <img
+                                    src={
+                                        user.bookmarks.filter(
+                                            (post) => post._id === id
+                                        ).length > 0
+                                            ? bookmarked
+                                            : bookmark1
+                                    }
+                                    alt="bookmarks"
+                                    onClick={() =>
+                                        postsInteractionReducer({
+                                            type:
+                                                user.bookmarks.filter(
+                                                    (post) => post._id === id
+                                                ).length > 0
+                                                    ? "remove_bookmark"
+                                                    : "bookmark",
+                                            id: id,
+                                        })
+                                    }
+                                />
+                            </div>
+                        ) : (
+                            ""
+                        )}
                         <div
                             onClick={shareHandler}
                             className="flex gap-x-1 items-center"

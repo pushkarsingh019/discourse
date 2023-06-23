@@ -4,13 +4,11 @@ import CreatePost from "../components/CreatePost";
 import { useContext } from "react";
 import { storeContext } from "../utils/store";
 import { useEffect } from "react";
-import edit from "../assets/edit.svg";
-import { useNavigate } from "react-router-dom";
 import Post from "../components/Post";
+import FloatingCreateButton from "../components/FloatingCreateButton";
 
 const HomeScreen = () => {
     const { posts, postReducer } = useContext(storeContext);
-    const navigate = useNavigate();
 
     useEffect(() => {
         postReducer({
@@ -23,12 +21,7 @@ const HomeScreen = () => {
         <section className="layout bg-gray-100">
             <Header />
             <Menu />
-            <div
-                className="bg-indigo-600 text-white fixed right-3 bottom-20 px-3.5 py-3.5 rounded-full md:hidden z-0 shadow-xl"
-                onClick={() => navigate("/create")}
-            >
-                <img src={edit} alt="new post" />
-            </div>
+            <FloatingCreateButton />
             <main className="main-content px-3 pt-2">
                 <CreatePost />
                 <br />

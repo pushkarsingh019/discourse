@@ -38,7 +38,7 @@ export const ContextProvider = ({children}) => {
                     break;
                 case 'signup':
                     try {
-                        const {data} = await axios.post(`${backendUrl}/api/signup`, {username : action.data.username, email : action.data.email, password  : action.data.password});
+                        const {data} = await axios.post(`${backendUrl}/api/signup`, {username : action.data.username, email : action.data.email, password  : action.data.password, name : action.data.name});
                         const {user, accessToken, message} = data;
                         setUser(user);
                         setAccessToken(accessToken);
@@ -131,6 +131,74 @@ export const ContextProvider = ({children}) => {
                     break;
             }
         },
+        profileReducer : async (action) => {
+            switch (action.type){
+                case 'logout':
+                    setUser({});
+                    setAccessToken();
+                    break;
+                case 'get_profile':
+                    try {
+                        const {data} = await axios.get(`${backendUrl}/api/user/${action.userId}`);
+                        setUser(data);
+                    } catch (error) {
+                        console.log(error.message)
+                    }
+                    break; 
+                case 'update_profile':
+                    try {
+                        const {data} = await axios.put(`${backendUrl}/api/user/${action.id}` , {
+                            name : action.data.name,
+                            username : action.data.username,
+                            bio : action.data.bio
+                        }, {
+                            headers : {
+                                authorization : accessToken
+                            }
+                        });
+                        setUser(data)
+                    } catch (error) {
+                        console.log(error.message)
+                    }
+                    break;
+                case 'follow':
+                    if(Object.keys(user).length === 0){
+                        console.log("log in first...")
+                    }
+                    else{
+                        try {
+                            const {data} = await axios.get(`${backendUrl}/api/user/follow/${action.id}`, {
+                                headers : {
+                                    authorization : accessToken
+                                }
+                            });
+                            setUser(data);
+                        } catch (error) {
+                            console.log(error.message)
+                        }
+                    }
+                    break;
+                    case 'unfollow':
+                        if(Object.keys(user).length === 0){
+                            console.log("log in first...")
+                        }
+                        else{
+                            try {
+                                const {data} = await axios.delete(`${backendUrl}/api/user/follow/${action.id}`, {
+                                    headers : {
+                                        authorization : accessToken
+                                    }
+                                });
+                                setUser(data);
+                            } catch (error) {
+                                console.log(error.message)
+                            }
+                        }
+                        break;
+                default:
+                    console.log('default profile reducer...')
+            }
+        }
     };
 
 

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useContext } from "react";
 
 // importing screens
 import HomeScreen from "./screens/HomeScreen";
@@ -10,12 +11,13 @@ import LandingScreen from "./screens/LandingScreen";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import ErrorScreen from "./screens/ErrorScreen";
+import PostScreen from "./screens/PostScreen";
+import EditProfile from "./screens/EditProfile";
+import UserScreen from "./screens/UserScreen";
 
 // importing other components
 import RequiresAuth from "./utils/RequiresAuth";
-import { useContext } from "react";
 import { storeContext } from "./utils/store";
-import PostScreen from "./screens/PostScreen";
 
 const App = () => {
     const { user } = useContext(storeContext);
@@ -49,8 +51,31 @@ const App = () => {
                         </RequiresAuth>
                     }
                 />
-                <Route path="/bookmarks" element={<BookmarkScreen />} />
-                <Route path="/profile" element={<ProfileScreen />} />
+                <Route
+                    path="/bookmarks"
+                    element={
+                        <RequiresAuth>
+                            <BookmarkScreen />
+                        </RequiresAuth>
+                    }
+                />
+                <Route
+                    path="/profile"
+                    element={
+                        <RequiresAuth>
+                            <ProfileScreen />
+                        </RequiresAuth>
+                    }
+                />
+                <Route
+                    path="/settings/edit-profile"
+                    element={
+                        <RequiresAuth>
+                            <EditProfile />
+                        </RequiresAuth>
+                    }
+                />
+                <Route path="/user/:userId" element={<UserScreen />} />
                 <Route path="/login" element={<LoginScreen />} />
                 <Route path="/signup" element={<SignupScreen />} />
                 <Route path="/post/:id" element={<PostScreen />} />

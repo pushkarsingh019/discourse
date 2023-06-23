@@ -25,6 +25,26 @@ const LoginScreen = () => {
         }
     };
 
+    const guestLoginHandler = async () => {
+        const guestCredentials = {
+            email: "gavin@hooli.com",
+            password: "killpiedpiper",
+        };
+        let response = await authReducer({
+            type: "login",
+            data: guestCredentials,
+        });
+        if (response.status === "success") {
+            if (location.state == null) {
+                navigate("/home");
+            } else {
+                navigate(location?.state?.from?.pathname);
+            }
+        } else {
+            setLoginStatus(response.message);
+        }
+    };
+
     return (
         <section className="flex flex-col h-screen justify-center items-center bg-gray-100">
             <h1 className="text-4xl font-serif text-center">Discourse</h1>
@@ -34,6 +54,12 @@ const LoginScreen = () => {
                 onSubmit={loginHandler}
             >
                 <h3 className="font-bold text-2xl text-center">Login</h3>
+                <p
+                    onClick={guestLoginHandler}
+                    className="text-md font-sans text-center font-light hover:text-sky-700 hover:underline hover:cursor-pointer"
+                >
+                    login as guest
+                </p>
                 <br />
                 <label htmlFor="email" className="text-sm">
                     Email
