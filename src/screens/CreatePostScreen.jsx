@@ -1,14 +1,21 @@
 import { useRef, useState } from "react";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Menu from "../components/Menu";
 import { storeContext } from "../utils/store";
 import image from "../assets/image.svg";
+import MobileTopBar from "../components/MobileTopBar";
 
 const CreatePostScreen = () => {
+    const location = useLocation();
+    const { edit, postId, postText } = location.state ?? {
+        edit: false,
+        postId: "",
+        postText: "",
+    };
     const { postReducer, user } = useContext(storeContext);
-    const [post, setPost] = useState("");
+    const [post, setPost] = useState(postText);
     const [file, setFile] = useState();
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
@@ -22,16 +29,29 @@ const CreatePostScreen = () => {
         setPost("");
         navigate("/home");
     };
+
+    const editPostHandler = () => {
+        postReducer({
+            type: "edit",
+            id: postId,
+            post: post,
+        });
+        navigate(`/post/${postId}`);
+    };
+
     return (
         <section className="layout">
             <Header />
             <Menu />
+            <MobileTopBar text={edit ? "Edit Post" : "Create New Post"} />
             <main className="main-content px-4 mt-3">
-                <div
-                    className="text-2xl md:hidden"
-                    onClick={() => navigate(-1)}
-                >
-                    ←
+                <div className="items-center gap-x-3 hidden md:flex">
+                    <div className="text-2xl" onClick={() => navigate(-1)}>
+                        ←
+                    </div>
+                    <p className="block text-lg font-medium">
+                        {edit ? "Edit Post" : "Create New Post"}
+                    </p>
                 </div>
                 <div className="flex items-start py-3">
                     <img
@@ -84,13 +104,23 @@ const CreatePostScreen = () => {
                                     {file ? file.name : ""}
                                 </p>
                             </div>
-                            <button
-                                onClick={createPostHandler}
-                                type="submit"
-                                className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-1 text-base rounded-md text-right"
-                            >
-                                Post
-                            </button>
+                            {edit ? (
+                                <button
+                                    onClick={editPostHandler}
+                                    type="submit"
+                                    className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-1 text-base rounded-md text-right"
+                                >
+                                    Edit Post
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={createPostHandler}
+                                    type="submit"
+                                    className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-1 text-base rounded-md text-right"
+                                >
+                                    Post
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>

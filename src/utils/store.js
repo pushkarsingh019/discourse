@@ -83,6 +83,31 @@ export const ContextProvider = ({children}) => {
                         console.log(error);
                     }
                     break;
+                case "comment":
+                    break;
+                case 'delete':
+                    try {
+                        let {data} = await axios.delete(`${backendUrl}/api/post/${action.id}`, {
+                            headers : {
+                                authorization : accessToken
+                            }
+                        });
+                        setPosts(data)
+                    } catch (error) {
+                        console.log(error.message)
+                    }
+                    break;
+                case 'edit':
+                    try {
+                        await axios.put(`${backendUrl}/api/post/${action.id}`, {post : action.post}, {
+                            headers : {
+                                authorization : accessToken
+                            }
+                        });
+                    } catch (error) {
+                        console.log(error.message)
+                    }
+                    break;
                 default:
                     break;
             }
@@ -124,8 +149,6 @@ export const ContextProvider = ({children}) => {
                     } catch (error) {
                         console.log(error.message)
                     }
-                    break;
-                case "comment":
                     break;
                 default:
                     break;
