@@ -1,10 +1,12 @@
 import React from "react";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { storeContext } from "../utils/store";
 import ErrorScreen from "./ErrorScreen";
 import Menu from "../components/Menu";
 import Header from "../components/Header";
+import Modal from "../components/Modal";
+import { formatTime, getDate } from "../utils/compareTime";
 
 import comment from "../assets/comment.svg";
 import like from "../assets/like.svg";
@@ -14,16 +16,52 @@ import liked from "../assets/liked.svg";
 import bookmarked from "../assets/bookmarked.svg";
 import goBack from "../assets/goBack.svg";
 import meatballs from "../assets/meatballs.svg";
-
-import { formatTime, getDate } from "../utils/compareTime";
-import { useEffect } from "react";
+import hide from "../assets/hide.svg";
+import unfollow from "../assets/unfollow.svg";
+import edit_black from "../assets/edit_black.svg";
+import deleteIcon from "../assets/deleteIcon.svg";
+import analytics from "../assets/analytics.svg";
 
 const PostScreen = () => {
     const { id } = useParams();
-    const { postsInteractionReducer, user, postToShow, postReducer, posts } =
-        useContext(storeContext);
+    const {
+        postsInteractionReducer,
+        user,
+        postToShow,
+        postReducer,
+        posts,
+        profileReducer,
+    } = useContext(storeContext);
     const { _id, authorDetails, post, likes, comments, time } = postToShow;
     const navigate = useNavigate();
+    const [isModalOpen, setToggleModal] = useState(false);
+
+    const handleModalChange = (toggleState) => setToggleModal(toggleState);
+
+    const hidePost = () => {
+        //TODO : handle hiding a post.
+        console.log("currently not handling the hide feature, but soon..");
+        setToggleModal(false);
+    };
+
+    const shareHandler = (event) => {
+        const { origin } = window.location;
+        if (navigator.share) {
+            navigator
+                .share({
+                    title: `post by ${authorDetails.username}`,
+                    text: post,
+                    url: origin,
+                })
+                .then(() => console.log("share function executed..."))
+                .catch((error) =>
+                    console.log(`error sharing : ${error.message}`)
+                );
+        } else {
+            navigator.clipboard.writeText(`${origin}/post/${_id}`);
+            //TODO: add the toast to show, copy to clipboard...
+        }
+    };
 
     useEffect(() => {
         postReducer(
@@ -35,32 +73,122 @@ const PostScreen = () => {
         );
         // eslint-disable-next-line
     }, [posts]);
+
+    const ViewerOptions = () => {
+        return (
+            <ul>
+                <li
+                    onClick={() => {
+                        profileReducer({
+                            type: "unfollow",
+                            id: postToShow.authorDetails.id,
+                        });
+                        setToggleModal(false);
+                    }}
+                    className="flex gap-3 items-center py-2"
+                >
+                    <img
+                        src={unfollow}
+                        alt="unfollow icon"
+                        className="w-6 h-6"
+                    />
+                    <p className="text-base font-medium">
+                        unfollow @ {postToShow.authorDetails.username}
+                    </p>
+                </li>
+                <li
+                    onClick={() => {
+                        shareHandler();
+                        setToggleModal(false);
+                    }}
+                    className="flex gap-3 items-center py-2"
+                >
+                    <img src={share} alt="share icon" className="w-6 h-6" />
+                    <p className="text-base font-medium">share post</p>
+                </li>
+                <li onClick={hidePost} className="flex gap-3 items-center py-2">
+                    <img src={hide} alt="hide icon" className="w-6 h-6" />
+                    <p className="text-base font-medium">hide post</p>
+                </li>
+            </ul>
+        );
+    };
+
+    const OwnerOptions = () => {
+        return (
+            <ul>
+                <li
+                    onClick={() => {
+                        setToggleModal(false);
+                        navigate(`/create`, {
+                            state: {
+                                edit: true,
+                                postId: postToShow._id,
+                                postText: postToShow.post,
+                            },
+                        });
+                    }}
+                    className="flex gap-3 items-center py-2"
+                >
+                    <img src={edit_black} alt="edit icon" className="w-6 h-6" />
+                    <p className="text-base font-medium">Edit post</p>
+                </li>
+                <li
+                    onClick={() => {
+                        postReducer({ type: "delete", id: postToShow._id });
+                        setToggleModal(false);
+                    }}
+                    className="flex gap-3 items-center py-2"
+                >
+                    <img
+                        src={deleteIcon}
+                        alt="delete icon"
+                        className="w-6 h-6"
+                    />
+                    <p className="text-base font-medium">Delete Post</p>
+                </li>
+                <li
+                    onClick={shareHandler}
+                    className="flex gap-3 items-center py-2"
+                >
+                    <img src={share} alt="share icon" className="w-6 h-6" />
+                    <p className="text-base font-medium">Share</p>
+                </li>
+                <li className="flex gap-3 items-center py-2">
+                    <img src={analytics} alt="hide icon" className="w-6 h-6" />
+                    <p className="text-base font-medium">Analytics</p>
+                </li>
+            </ul>
+        );
+    };
+
     if (Object.keys(postToShow).length === 0) {
         return <ErrorScreen />;
     } else {
-        const shareHandler = (event) => {
-            const { origin } = window.location;
-            if (navigator.share) {
-                navigator
-                    .share({
-                        title: `post by ${authorDetails.username}`,
-                        text: post,
-                        url: origin,
-                    })
-                    .then(() => console.log("share function executed..."))
-                    .catch((error) =>
-                        console.log(`error sharing : ${error.message}`)
-                    );
-            } else {
-                navigator.clipboard.writeText(`${origin}/post/${_id}`);
-                //TODO: add the toast to show, copy to clipboard...
-            }
-        };
         return (
             <section className="layout">
                 <Header />
                 <Menu />
                 <main className="main-content px-4 py-2 flex flex-col gap-y-3">
+                    <Modal
+                        isOpen={isModalOpen}
+                        toggleIsOpen={handleModalChange}
+                    >
+                        {Object.keys(user).length === 0 ? (
+                            <ViewerOptions />
+                        ) : user._id === postToShow.authorDetails.id ? (
+                            <OwnerOptions />
+                        ) : (
+                            <ViewerOptions />
+                        )}
+
+                        <button
+                            onClick={() => setToggleModal(false)}
+                            className="w-full border rounded-lg text-md font-medium py-1.5 px-2 mt-3 bg-gray-50"
+                        >
+                            Cancel
+                        </button>
+                    </Modal>
                     <div className="flex gap-x-3 items-center">
                         <img
                             src={goBack}
@@ -90,6 +218,7 @@ const PostScreen = () => {
                             src={meatballs}
                             alt="menu"
                             className="w-12 h-10 object-contain"
+                            onClick={() => setToggleModal(true)}
                         />
                     </div>
                     <p className="text-lg mb-3 md:text-xl">{post}</p>
