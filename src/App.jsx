@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
+import { Toaster } from "react-hot-toast";
 
 // importing screens
 import HomeScreen from "./screens/HomeScreen";
@@ -23,6 +24,7 @@ const App = () => {
     const { user } = useContext(storeContext);
     return (
         <BrowserRouter>
+            <Toaster />
             <Routes>
                 <Route
                     path="/"
