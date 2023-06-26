@@ -9,17 +9,26 @@ export const ContextProvider = ({children}) => {
     const [accessToken, setAccessToken] = useState(localStorage.getItem("access_token") ? localStorage.getItem("access_token") : undefined);
     const [posts, setPosts] = useState([]);
     const [postToShow, setPost] = useState({});
+    const [feed, setFeed] = useState([]);
 
     useEffect(() => {
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("access_token", accessToken);
     }, [user, accessToken])
 
+    useEffect(() => {
+        store.postReducer({
+            type : 'get_feed'
+        })
+        // eslint-disable-next-line
+    }, [posts]);
+
 
     const store = {
         user : user,
         accessToken : accessToken,
         posts : posts, 
+        feed : feed,
         postToShow : postToShow,
         authReducer : async (action) => {
             switch (action.type){
@@ -63,6 +72,14 @@ export const ContextProvider = ({children}) => {
                             }
                         }, )
                         setPosts(data.reverse());
+                    } catch (error) {
+                        console.log(error.message)
+                    }
+                    break;
+                case 'get_feed': 
+                    try {
+                        let {data} = await axios.get(`${backendUrl}/api/feed` , {headers : {authorization : accessToken}});
+                        setFeed(data);
                     } catch (error) {
                         console.log(error.message)
                     }

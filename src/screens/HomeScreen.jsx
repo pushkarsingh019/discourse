@@ -6,13 +6,16 @@ import { storeContext } from "../utils/store";
 import { useEffect } from "react";
 import Post from "../components/Post";
 import FloatingCreateButton from "../components/FloatingCreateButton";
+import { useNavigate } from "react-router-dom";
+import MobileTopBar from "../components/MobileTopBar";
 
 const HomeScreen = () => {
-    const { posts, postReducer } = useContext(storeContext);
+    const { feed, postReducer } = useContext(storeContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         postReducer({
-            type: "fetch_posts",
+            type: "get_feed",
         });
         // eslint-disable-next-line
     }, []);
@@ -22,28 +25,41 @@ const HomeScreen = () => {
             <Header />
             <Menu />
             <FloatingCreateButton />
+            <MobileTopBar text={`Discourse`} />
             <main className="main-content px-3 pt-2">
                 <CreatePost />
                 <br />
-                <h2 className="text-2xl font-sans font-medium mb-3">
+                <h2 className="text-2xl font-sans font-medium mb-3 hidden md:block">
                     Latest Posts
                 </h2>
-                <br />
-                {posts.map((post) => {
-                    return (
-                        <Post
-                            id={post._id}
-                            key={post._id}
-                            post={post.post}
-                            username={post.authorDetails.username}
-                            time={post.time}
-                            likes={post.likes}
-                            community={post.community}
-                            authorDetails={post.authorDetails}
-                            comments={post.comments}
-                        />
-                    );
-                })}
+                {feed.length === 0 ? (
+                    <p className="text-lg">
+                        no posts by anyone you follow{" "}
+                        <span
+                            className="font-medium text-sky-500 hover:cursor-pointer"
+                            onClick={() => navigate(`/explore`)}
+                        >
+                            explore more
+                        </span>
+                        .
+                    </p>
+                ) : (
+                    feed.map((post) => {
+                        return (
+                            <Post
+                                id={post._id}
+                                key={post._id}
+                                post={post.post}
+                                username={post.authorDetails.username}
+                                time={post.time}
+                                likes={post.likes}
+                                community={post.community}
+                                authorDetails={post.authorDetails}
+                                comments={post.comments}
+                            />
+                        );
+                    })
+                )}
             </main>
             <div className="aside-content">
                 <h3 className="text-2xl">Who to follow?</h3>
