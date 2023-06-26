@@ -2,7 +2,6 @@ import React from "react";
 import { useContext, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { storeContext } from "../utils/store";
-import ErrorScreen from "./ErrorScreen";
 import Menu from "../components/Menu";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
@@ -71,7 +70,6 @@ const PostScreen = () => {
             type: "get_post",
             id: id,
         });
-        console.log("rendering...");
         // eslint-disable-next-line
     }, [posts]);
 
@@ -164,7 +162,11 @@ const PostScreen = () => {
     };
 
     if (Object.keys(postToShow).length === 0) {
-        return <ErrorScreen />;
+        return (
+            <div className="flex h-screen justify-center items-center">
+                <p className="text-2xl font-medium">loading...</p>
+            </div>
+        );
     } else {
         return (
             <section className="layout">
