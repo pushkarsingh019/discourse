@@ -22,7 +22,7 @@ const ProfileScreen = () => {
             type: "fetch_posts",
         });
         // eslint-disable-next-line
-    }, []);
+    }, [user]);
 
     return (
         <section className="layout">

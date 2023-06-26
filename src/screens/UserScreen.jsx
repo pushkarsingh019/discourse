@@ -56,7 +56,7 @@ const UserScreen = () => {
             type: "fetch_posts",
         });
         // eslint-disable-next-line
-    }, []);
+    }, [user]);
 
     if (loading === true) {
         return (
