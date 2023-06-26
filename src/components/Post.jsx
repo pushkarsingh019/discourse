@@ -166,11 +166,15 @@ const Post = ({
                 src="https://avatars.githubusercontent.com/u/94926273?v=4"
                 alt="pushkar singh"
                 className="w-10 h-auto object-contain rounded-full mr-3 md:w-11"
+                onClick={() => navigate(`/user/${username}`)}
             />
             <div className="flex flex-col justify-between w-full">
                 <div className="flex justify-between items-center">
                     <div className="flex gap-x-4 items-center mb-4 md:mb-5">
-                        <div className="text-base md:text-lg font-medium">
+                        <div
+                            className="text-base md:text-lg font-medium"
+                            onClick={() => navigate(`/user/${username}`)}
+                        >
                             @{username}
                         </div>
                         <div className="text-sm">{compareTime(time)}</div>

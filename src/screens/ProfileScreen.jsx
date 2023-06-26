@@ -21,8 +21,12 @@ const ProfileScreen = () => {
         postReducer({
             type: "fetch_posts",
         });
+        profileReducer({
+            type: "get_profile",
+            userId: user._id,
+        });
         // eslint-disable-next-line
-    }, [user]);
+    }, []);
 
     return (
         <section className="layout">
