@@ -221,6 +221,28 @@ export const ContextProvider = ({children}) => {
                 default:
                     console.log('default profile reducer...')
             }
+        },
+        commentsReducer : async (action) => {
+            switch (action.type) {
+                case 'new_comment':
+                    try {
+                        let {data} = await axios.post(`${backendUrl}/api/post/comment` , {
+                            comment : action.comment,
+                            postId : action.id
+                        }, {
+                            headers : {
+                                authorization : accessToken
+                            }
+                        });
+                        setPost(data);
+                    } catch (error) {
+                        console.log(error.message)
+                    }
+                    break;
+            
+                default:
+                    break;
+            }
         }
     };
 
