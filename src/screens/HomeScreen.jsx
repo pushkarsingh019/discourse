@@ -8,6 +8,7 @@ import Post from "../components/Post";
 import FloatingCreateButton from "../components/FloatingCreateButton";
 import { useNavigate } from "react-router-dom";
 import MobileTopBar from "../components/MobileTopBar";
+import SuggestionTab from "../components/SuggestionTab";
 
 const HomeScreen = () => {
     const { feed, postReducer } = useContext(storeContext);
@@ -61,15 +62,7 @@ const HomeScreen = () => {
                     })
                 )}
             </main>
-            <div className="aside-content">
-                <h3 className="text-2xl">Who to follow?</h3>
-                <ul>
-                    <li>Pushkar Singh</li>
-                    <li>Pushkar Singh</li>
-                    <li>Pushkar Singh</li>
-                    <li>Pushkar Singh</li>
-                </ul>
-            </div>
+            <SuggestionTab />
         </section>
     );
 };

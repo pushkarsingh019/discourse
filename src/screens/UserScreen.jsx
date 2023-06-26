@@ -11,6 +11,7 @@ import Header from "../components/Header";
 import Menu from "../components/Menu";
 import Post from "../components/Post";
 import ErrorScreen from "./ErrorScreen";
+import SuggestionTab from "../components/SuggestionTab";
 
 const UserScreen = () => {
     const { userId } = useParams();
@@ -193,15 +194,7 @@ const UserScreen = () => {
                     )}
                 </div>
             </main>
-            <div className="aside-content">
-                <h3 className="text-2xl">Who to follow?</h3>
-                <ul>
-                    <li>Pushkar Singh</li>
-                    <li>Pushkar Singh</li>
-                    <li>Pushkar Singh</li>
-                    <li>Pushkar Singh</li>
-                </ul>
-            </div>
+            <SuggestionTab />
         </section>
     );
 };

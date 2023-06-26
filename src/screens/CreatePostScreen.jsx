@@ -6,6 +6,7 @@ import Menu from "../components/Menu";
 import { storeContext } from "../utils/store";
 import image from "../assets/image.svg";
 import MobileTopBar from "../components/MobileTopBar";
+import SuggestionTab from "../components/SuggestionTab";
 
 const CreatePostScreen = () => {
     const location = useLocation();
@@ -125,6 +126,7 @@ const CreatePostScreen = () => {
                     </div>
                 </div>
             </main>
+            <SuggestionTab />
         </section>
     );
 };

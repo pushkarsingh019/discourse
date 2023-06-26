@@ -23,6 +23,7 @@ import edit_black from "../assets/edit_black.svg";
 import deleteIcon from "../assets/deleteIcon.svg";
 import analytics from "../assets/analytics.svg";
 import CommentForm from "../components/CommentForm";
+import SuggestionTab from "../components/SuggestionTab";
 
 const PostScreen = () => {
     const { id } = useParams();
@@ -169,7 +170,7 @@ const PostScreen = () => {
             <section className="layout">
                 <Header />
                 <Menu />
-                <main className="main-content px-4 py-2 flex flex-col gap-y-3">
+                <main className="main-content px-4 py-2 flex flex-col gap-y-3 bg-white">
                     <Modal
                         isOpen={isModalOpen}
                         toggleIsOpen={handleModalChange}
@@ -311,13 +312,7 @@ const PostScreen = () => {
                         );
                     })}
                 </main>
-                <div className="aside-content">
-                    <h2 className="text-2xl">Who to follow?</h2>
-                    <p>pushkar singh</p>
-                    <p>pushkar singh</p>
-                    <p>pushkar singh</p>
-                    <p>pushkar singh</p>
-                </div>
+                <SuggestionTab />
             </section>
         );
     }

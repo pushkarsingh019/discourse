@@ -4,6 +4,7 @@ import Menu from "../components/Menu";
 import { storeContext } from "../utils/store";
 import Post from "../components/Post";
 import FloatingCreateButton from "../components/FloatingCreateButton";
+import SuggestionTab from "../components/SuggestionTab";
 
 const BookmarkScreen = () => {
     const { user } = useContext(storeContext);
@@ -36,6 +37,7 @@ const BookmarkScreen = () => {
                     })
                 )}
             </main>
+            <SuggestionTab />
         </section>
     );
 };

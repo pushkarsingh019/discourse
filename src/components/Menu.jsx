@@ -24,7 +24,7 @@ const Menu = () => {
                     alt="home"
                     className="md:w-7 md:h-7 md:object-contain"
                 />
-                <small className="text-base">Home</small>
+                <small className="text-sm md:text-base">Home</small>
             </div>
             <div
                 className="flex flex-col items-center md:flex-row md:px-3 md:py-2 md:mb-2 md:gap-x-2  md:hover:bg-white rounded-md md:hover:shadow-sm"
@@ -35,7 +35,7 @@ const Menu = () => {
                     alt="explore"
                     className="md:w-7 md:h-7 md:object-contain"
                 />
-                <small className="text-base">Explore</small>
+                <small className="text-sm md:text-base">Explore</small>
             </div>
             <div
                 className="flex flex-col items-center md:flex-row md:px-3 md:py-2 md:mb-2  md:gap-x-2  md:hover:bg-indigo-300 rounded-md md:hover:shadow-sm"
@@ -46,7 +46,7 @@ const Menu = () => {
                     alt="create"
                     className="md:w-7 md:h-7 md:object-contain md:hover:text-white"
                 />
-                <small className="text-base">Create</small>
+                <small className="text-sm md:text-base">Create</small>
             </div>
             <div
                 className="flex flex-col items-center md:flex-row md:px-3 md:py-2 md:mb-2 md:gap-x-2  md:hover:bg-white rounded-md md:hover:shadow-sm"
@@ -57,7 +57,7 @@ const Menu = () => {
                     alt="bookmarks"
                     className="md:w-7 md:h-7 md:object-contain"
                 />
-                <small className="text-base">Bookmark</small>
+                <small className="text-sm md:text-base">Bookmark</small>
             </div>
             <div
                 className="flex flex-col items-center md:flex-row md:px-3 md:py-2 md:mb-2 md:gap-x-2  md:hover:bg-white rounded-md md:hover:shadow-sm"
@@ -68,7 +68,7 @@ const Menu = () => {
                     alt="profile"
                     className="md:w-7 md:h-7 md:object-contain"
                 />
-                <small className="text-base">
+                <small className="text-sm md:text-base">
                     {Object.keys(user).length === 0 ? "profile" : user.username}
                 </small>
             </div>
