@@ -14,7 +14,7 @@ export const ContextProvider = ({children}) => {
 
     const toastOptions = {
         duration : 2000,
-        position : 'bottom-center',
+        position : 'top-center',
     };
 
     useEffect(() => {
