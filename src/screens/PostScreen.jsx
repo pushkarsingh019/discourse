@@ -199,7 +199,12 @@ const PostScreen = () => {
                         <h3 className="text-lg font-medium">Post</h3>
                     </div>
                     <div className="flex justify-between items-start md:mb-4">
-                        <div className="flex gap-x-1 items-center">
+                        <div
+                            className="flex gap-x-1 items-center"
+                            onClick={() =>
+                                navigate(`/user/${authorDetails.username}`)
+                            }
+                        >
                             <img
                                 src="https://avatars.githubusercontent.com/u/94926273?v=4"
                                 alt="pushkar singh"
@@ -207,7 +212,7 @@ const PostScreen = () => {
                             />
                             <div className="flex flex-col">
                                 <p className="text-lg font-medium">
-                                    Pushkar Singh
+                                    {authorDetails.name}
                                 </p>
                                 <p className="text-sm text-gray-600">
                                     @{authorDetails.username}
