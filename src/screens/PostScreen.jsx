@@ -7,6 +7,7 @@ import Header from "../components/Header";
 import Modal from "../components/Modal";
 import Comment from "../components/Comment";
 import { formatTime, getDate } from "../utils/compareTime";
+import { checkIsFollower } from "../utils/isFollower";
 
 import comment from "../assets/comment.svg";
 import like from "../assets/like.svg";
@@ -83,8 +84,10 @@ const PostScreen = () => {
                 <li
                     onClick={() => {
                         profileReducer({
-                            type: "unfollow",
-                            id: postToShow.authorDetails.id,
+                            type: checkIsFollower(user, authorDetails.id)
+                                ? "unfollow"
+                                : "follow",
+                            id: authorDetails.id,
                         });
                         setToggleModal(false);
                     }}
@@ -96,7 +99,10 @@ const PostScreen = () => {
                         className="w-6 h-6"
                     />
                     <p className="text-base font-medium">
-                        unfollow @ {postToShow.authorDetails.username}
+                        {checkIsFollower(user, authorDetails.id)
+                            ? "Unfollow"
+                            : "Follow"}{" "}
+                        @{postToShow.authorDetails.username}
                     </p>
                 </li>
                 <li
@@ -140,6 +146,7 @@ const PostScreen = () => {
                     onClick={() => {
                         postReducer({ type: "delete", id: postToShow._id });
                         setToggleModal(false);
+                        navigate("/home");
                     }}
                     className="flex gap-3 items-center py-2"
                 >

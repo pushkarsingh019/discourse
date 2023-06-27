@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 import Modal from "./Modal";
 import { toast } from "react-hot-toast";
+import { checkIsFollower } from "../utils/isFollower";
 
 const Post = ({
     id,
@@ -54,7 +55,6 @@ const Post = ({
                 duration: 2000,
                 position: "top-center",
             });
-            //TODO: add the toast to show, copy to clipboard...
         }
     };
 
@@ -67,7 +67,9 @@ const Post = ({
                 <li
                     onClick={() => {
                         profileReducer({
-                            type: "unfollow",
+                            type: checkIsFollower(user, authorDetails.id)
+                                ? "unfollow"
+                                : "follow",
                             id: authorDetails.id,
                         });
                         setToggleModal(false);
@@ -80,7 +82,10 @@ const Post = ({
                         className="w-6 h-6"
                     />
                     <p className="text-base font-medium">
-                        unfollow @ {username}
+                        {checkIsFollower(user, authorDetails.id)
+                            ? "Unfollow"
+                            : "Follow"}{" "}
+                        @{authorDetails.username}
                     </p>
                 </li>
                 <li

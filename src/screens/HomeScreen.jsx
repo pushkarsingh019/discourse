@@ -22,7 +22,7 @@ const HomeScreen = () => {
     }, []);
 
     return (
-        <section className="layout bg-gray-100">
+        <section className="layout">
             <Header />
             <Menu />
             <FloatingCreateButton />
