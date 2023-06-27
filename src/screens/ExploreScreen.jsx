@@ -49,7 +49,7 @@ const ExploreScreen = () => {
                     })
                 )}
             </main>
-            <SuggestionTab />
+            <SuggestionTab showPostsFilter={true} />
         </section>
     );
 };

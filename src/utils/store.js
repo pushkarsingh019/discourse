@@ -2,6 +2,8 @@ import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { backendUrl } from "./config";
 import {toast} from "react-hot-toast"
+import { sortPostByTime } from "./compareTime";
+import { sortPostsByTrending } from "./compareTrending";
 
 export const storeContext = createContext();
 
@@ -11,6 +13,7 @@ export const ContextProvider = ({children}) => {
     const [posts, setPosts] = useState([]);
     const [postToShow, setPost] = useState({});
     const [feed, setFeed] = useState([]);
+    const [sortCondition, setSortCondition] = useState("Latest");
 
     const toastOptions = {
         duration : 2000,
@@ -36,6 +39,7 @@ export const ContextProvider = ({children}) => {
         posts : posts, 
         feed : feed,
         postToShow : postToShow,
+        sortCondition : sortCondition,
         authReducer : async (action) => {
             switch (action.type){
                 case 'login':
@@ -45,6 +49,7 @@ export const ContextProvider = ({children}) => {
                         const {user, accessToken, message} = data;
                         setUser(user);
                         setAccessToken(accessToken);
+                        toast.dismiss();
                         toast.success("Logged in", toastOptions)
                         return {status : "success" , message}
                     } catch (error) {
@@ -55,13 +60,14 @@ export const ContextProvider = ({children}) => {
                     }
                     break;
                 case 'signup':
-                    toast.loading("Creating your account");
+                    toast.loading("Creating your account", toastOptions);
                     try {
                         const {data} = await axios.post(`${backendUrl}/api/signup`, {username : action.data.username, email : action.data.email, password  : action.data.password, name : action.data.name});
                         const {user, accessToken, message} = data;
                         setUser(user);
                         setAccessToken(accessToken);
-                        toast.success("Account created")
+                        toast.dismiss();
+                        toast.success("Welcome to discourse!")
                         return {status : "success" , message : message}
                     } catch (error) {
                         toast.dismiss();
@@ -83,8 +89,9 @@ export const ContextProvider = ({children}) => {
                             authorization : accessToken
                             }
                         }, )
-                        setPosts(data.reverse());
+                        setPosts(data);
                         toast.dismiss();
+                        toast.success("posted", toastOptions);
                     } catch (error) {
                         console.log(error.message)
                         toast.error("could not create your post :(")
@@ -93,8 +100,14 @@ export const ContextProvider = ({children}) => {
                 case 'get_feed': 
                     try {
                         let {data} = await axios.get(`${backendUrl}/api/feed` , {headers : {authorization : accessToken}});
-                        setFeed(data);
-                        toast.dismiss();
+                        let sortedFeed = [];
+                        if(sortCondition === "Latest"){
+                            sortedFeed = sortPostByTime(data);
+                        }
+                        else{
+                            sortedFeed = sortPostsByTrending(data);
+                        }
+                        setFeed(sortedFeed);
                     } catch (error) {
                         console.log(error.message);
                     }
@@ -107,27 +120,26 @@ export const ContextProvider = ({children}) => {
                     });
                     try {
                         const {data} = await axios.get(`${backendUrl}/api/post`);
-                        setPosts(data.reverse());
+                        setPosts(data);
                         toast.dismiss();
                     } catch (error) {
-                        toast.error("error fetching posts");
+                        toast.error("error fetching posts", toastOptions);
                         console.log(error);
                     }
                     break;
                 case 'get_post':
-                    toast.loading("fetching post" , {
+                    toast.loading("beep beep boop" , {
                         id : "post"
                     })
                     try {
                         const {data} = await axios.get(`${backendUrl}/api/post/${action.id}`);
                         setPost(data);
                         toast.dismiss();
+                        toast.success("Enjoy the discourse", toastOptions);
                     } catch (error) {
                         console.log(error);
                         toast.error("error fetching post")
                     }
-                    break;
-                case "comment":
                     break;
                 case 'delete':
                     try {
@@ -170,7 +182,7 @@ export const ContextProvider = ({children}) => {
                                 authorization : accessToken
                             }
                         });
-                        setPosts(data.reverse())
+                        setPosts(data)
                     } catch (error) {
                         console.log(error.message)
                     }
@@ -196,7 +208,7 @@ export const ContextProvider = ({children}) => {
                             }
                         });
                         setUser(data);
-                        toast.success("removed bookmark", toastOptions)
+                        toast.success("removed from bookmarks", toastOptions)
                     } catch (error) {
                         console.log(error.message)
                     }
@@ -210,6 +222,7 @@ export const ContextProvider = ({children}) => {
                 case 'logout':
                     setUser({});
                     setAccessToken();
+                    toast("Logged out", toastOptions);
                     break;
                 case 'get_profile':
                     try {
@@ -293,6 +306,7 @@ export const ContextProvider = ({children}) => {
                         });
                         setPost(data);
                         toast.dismiss();
+                        toast.success("comment added", toastOptions);
                     } catch (error) {
                         console.log(error.message)
                         return
@@ -302,7 +316,28 @@ export const ContextProvider = ({children}) => {
                 default:
                     break;
             }
-        }
+        },
+        filterReducer: (action) => {
+            switch (action.type) {
+              case "Latest":
+                const sortedFeed = sortPostByTime(feed);
+                const sortedPosts = sortPostByTime(posts);
+                setFeed(sortedFeed);
+                setPosts(sortedPosts);
+                setSortCondition(action.type);
+                break;
+              case "Trending":
+                const trendingPosts = sortPostsByTrending(posts);
+                const trendingFeed = sortPostsByTrending(feed);
+                setFeed(trendingFeed);
+                setPosts(trendingPosts);
+                setSortCondition(action.type)
+                break;
+              default:
+                console.error("no matching cases found -> filter Reducer");
+            }
+          }
+          
     };
 
 

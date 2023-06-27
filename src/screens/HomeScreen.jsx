@@ -11,7 +11,7 @@ import MobileTopBar from "../components/MobileTopBar";
 import SuggestionTab from "../components/SuggestionTab";
 
 const HomeScreen = () => {
-    const { feed, postReducer } = useContext(storeContext);
+    const { feed, postReducer, sortCondition } = useContext(storeContext);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,7 +31,7 @@ const HomeScreen = () => {
                 <CreatePost />
                 <br />
                 <h2 className="text-2xl font-sans font-medium mb-3 hidden md:block">
-                    Latest Posts
+                    {sortCondition} Posts
                 </h2>
                 {feed.length === 0 ? (
                     <p className="text-lg">
@@ -48,8 +48,8 @@ const HomeScreen = () => {
                     feed.map((post) => {
                         return (
                             <Post
-                                id={post._id}
                                 key={post._id}
+                                id={post._id}
                                 post={post.post}
                                 username={post.authorDetails.username}
                                 time={post.time}
@@ -62,7 +62,7 @@ const HomeScreen = () => {
                     })
                 )}
             </main>
-            <SuggestionTab />
+            <SuggestionTab showPostsFilter={true} />
         </section>
     );
 };

@@ -27,3 +27,9 @@ export const formatTime = (time) => {
   const options = { hour: 'numeric', minute: '2-digit', hour12: true };
   return dateObj.toLocaleTimeString('en-US', options);
 };
+
+export const sortPostByTime = (posts) => {
+  const sortedPosts = [...posts];
+  sortedPosts.sort((a, b) => new Date(b.time) - new Date(a.time));
+  return sortedPosts;
+};
