@@ -37,9 +37,9 @@ const EditProfile = () => {
         <section className="layout">
             <Header />
             <Menu />
-            <main className="main-content">
+            <main className="main-content bg-white">
                 <MobileTopBar text={`Edit Profile`} />
-                <div className="gap-x-2 items-center hidden md:flex">
+                <div className="gap-x-2 items-center hidden md:flex pt-3">
                     <img
                         src={goBack}
                         alt="go back"

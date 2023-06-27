@@ -22,12 +22,14 @@
     grid-template-columns: 0.8fr 2fr 1.1fr;
     column-gap: 1.5rem;
     row-gap: 1.5rem;
+    background-color: #f3f4f6;
     grid-template-areas: "header header header" "menu main-content aside-content";
   }
 
   @media screen and (max-width : 747px) {
     .layout {
       display: block;
+      background-color: white;
     }
     .menu {
       display: flex;

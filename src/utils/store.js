@@ -264,6 +264,12 @@ export const ContextProvider = ({children}) => {
                                 }
                             });
                             setUser(data);
+                            store.postReducer({
+                                type : 'get_feed'
+                            });
+                            store.postReducer({
+                                type : 'fetch_posts'
+                            });
                         } catch (error) {
                             console.log(error.message)
                         }
@@ -282,6 +288,12 @@ export const ContextProvider = ({children}) => {
                                     }
                                 });
                                 setUser(data);
+                                store.postReducer({
+                                    type : 'get_feed'
+                                });
+                                store.postReducer({
+                                    type : 'fetch_posts'
+                                });
                             } catch (error) {
                                 console.log(error.message)
                             }

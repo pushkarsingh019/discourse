@@ -45,7 +45,7 @@ const CreatePostScreen = () => {
             <Header />
             <Menu />
             <MobileTopBar text={edit ? "Edit Post" : "Create New Post"} />
-            <main className="main-content px-4 mt-3">
+            <main className="main-content px-4 mt-3 md:pt-3 bg-white">
                 <div className="items-center gap-x-3 hidden md:flex">
                     <div className="text-2xl" onClick={() => navigate(-1)}>
                         ←
@@ -54,7 +54,7 @@ const CreatePostScreen = () => {
                         {edit ? "Edit Post" : "Create New Post"}
                     </p>
                 </div>
-                <div className="flex items-start py-3">
+                <div className="flex items-start py-3 bg-white">
                     <img
                         src="https://avatars.githubusercontent.com/u/94926273?v=4"
                         alt="pushkar singh"

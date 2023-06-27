@@ -34,7 +34,7 @@ const ProfileScreen = () => {
             <Header />
             <Menu />
             <FloatingCreateButton />
-            <main className="main-content">
+            <main className="main-content bg-white">
                 <MobileTopBar text={`Profile`} />
                 <div className="px-4 my-6">
                     {/* the profile icon and the name -- cta buttons */}

@@ -20,7 +20,7 @@ const Search = () => {
 const SuggestionTab = ({ showPostsFilter }) => {
     const { filterReducer } = useContext(storeContext);
     return (
-        <div className="aside-content mr-5 hidden lg:block">
+        <div className="aside-content mr-5 hidden lg:block bg-gray-100 h-screen px-2">
             {showPostsFilter === true ? (
                 <select
                     onChange={(e) => filterReducer({ type: e.target.value })}
