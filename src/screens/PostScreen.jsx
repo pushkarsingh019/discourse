@@ -23,6 +23,7 @@ import deleteIcon from "../assets/deleteIcon.svg";
 import analytics from "../assets/analytics.svg";
 import CommentForm from "../components/CommentForm";
 import SuggestionTab from "../components/SuggestionTab";
+import { toast } from "react-hot-toast";
 
 const PostScreen = () => {
     const { id } = useParams();
@@ -61,7 +62,10 @@ const PostScreen = () => {
                 );
         } else {
             navigator.clipboard.writeText(`${origin}/post/${_id}`);
-            //TODO: add the toast to show, copy to clipboard...
+            toast.success("copied to clipboard", {
+                duration: 2000,
+                position: "top-center",
+            });
         }
     };
 
@@ -97,8 +101,8 @@ const PostScreen = () => {
                 </li>
                 <li
                     onClick={() => {
-                        shareHandler();
                         setToggleModal(false);
+                        shareHandler();
                     }}
                     className="flex gap-3 items-center py-2"
                 >

@@ -17,6 +17,7 @@ import { storeContext } from "../utils/store";
 import { useNavigate } from "react-router-dom";
 
 import Modal from "./Modal";
+import { toast } from "react-hot-toast";
 
 const Post = ({
     id,
@@ -49,6 +50,10 @@ const Post = ({
                 );
         } else {
             navigator.clipboard.writeText(`${origin}/post/${id}`);
+            toast.success("copied to clipboard", {
+                duration: 2000,
+                position: "top-center",
+            });
             //TODO: add the toast to show, copy to clipboard...
         }
     };
