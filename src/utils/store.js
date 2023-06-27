@@ -2,6 +2,8 @@ import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { backendUrl } from "./config";
 import {toast} from "react-hot-toast"
+import { sortPostByTime } from "./compareTime";
+import { sortPostsByTrending } from "./compareTrending";
 
 export const storeContext = createContext();
 
@@ -11,6 +13,7 @@ export const ContextProvider = ({children}) => {
     const [posts, setPosts] = useState([]);
     const [postToShow, setPost] = useState({});
     const [feed, setFeed] = useState([]);
+    const [sortCondition, setSortCondition] = useState("Latest");
 
     const toastOptions = {
         duration : 2000,
@@ -36,6 +39,7 @@ export const ContextProvider = ({children}) => {
         posts : posts, 
         feed : feed,
         postToShow : postToShow,
+        sortCondition : sortCondition,
         authReducer : async (action) => {
             switch (action.type){
                 case 'login':
@@ -83,8 +87,9 @@ export const ContextProvider = ({children}) => {
                             authorization : accessToken
                             }
                         }, )
-                        setPosts(data.reverse());
+                        setPosts(data);
                         toast.dismiss();
+                        toast.success("posted", toastOptions);
                     } catch (error) {
                         console.log(error.message)
                         toast.error("could not create your post :(")
@@ -93,8 +98,14 @@ export const ContextProvider = ({children}) => {
                 case 'get_feed': 
                     try {
                         let {data} = await axios.get(`${backendUrl}/api/feed` , {headers : {authorization : accessToken}});
-                        setFeed(data);
-                        toast.dismiss();
+                        let sortedFeed = [];
+                        if(sortCondition === "Latest"){
+                            sortedFeed = sortPostByTime(data);
+                        }
+                        else{
+                            sortedFeed = sortPostsByTrending(data);
+                        }
+                        setFeed(sortedFeed);
                     } catch (error) {
                         console.log(error.message);
                     }
@@ -107,8 +118,7 @@ export const ContextProvider = ({children}) => {
                     });
                     try {
                         const {data} = await axios.get(`${backendUrl}/api/post`);
-                        setPosts(data.reverse());
-                        toast.dismiss();
+                        setPosts(data);
                     } catch (error) {
                         toast.error("error fetching posts");
                         console.log(error);
@@ -122,12 +132,11 @@ export const ContextProvider = ({children}) => {
                         const {data} = await axios.get(`${backendUrl}/api/post/${action.id}`);
                         setPost(data);
                         toast.dismiss();
+                        toast.success("post loaded", toastOptions);
                     } catch (error) {
                         console.log(error);
                         toast.error("error fetching post")
                     }
-                    break;
-                case "comment":
                     break;
                 case 'delete':
                     try {
@@ -170,7 +179,7 @@ export const ContextProvider = ({children}) => {
                                 authorization : accessToken
                             }
                         });
-                        setPosts(data.reverse())
+                        setPosts(data)
                     } catch (error) {
                         console.log(error.message)
                     }
@@ -293,6 +302,7 @@ export const ContextProvider = ({children}) => {
                         });
                         setPost(data);
                         toast.dismiss();
+                        toast.success("comment added", toastOptions);
                     } catch (error) {
                         console.log(error.message)
                         return
@@ -302,7 +312,28 @@ export const ContextProvider = ({children}) => {
                 default:
                     break;
             }
-        }
+        },
+        filterReducer: (action) => {
+            switch (action.type) {
+              case "Latest":
+                const sortedFeed = sortPostByTime(feed);
+                const sortedPosts = sortPostByTime(posts);
+                setFeed(sortedFeed);
+                setPosts(sortedPosts);
+                setSortCondition(action.type);
+                break;
+              case "Trending":
+                const trendingPosts = sortPostsByTrending(posts);
+                const trendingFeed = sortPostsByTrending(feed);
+                setFeed(trendingFeed);
+                setPosts(trendingPosts);
+                setSortCondition(action.type)
+                break;
+              default:
+                console.error("no matching cases found -> filter Reducer");
+            }
+          }
+          
     };
 
 

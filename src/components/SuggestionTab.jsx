@@ -1,10 +1,12 @@
 import ProfileSuggestionBox from "./ProfileSuggestionBox";
 import { userSuggestion } from "../utils/data";
 import search from "../assets/search.svg";
+import { useContext } from "react";
+import { storeContext } from "../utils/store";
 
 const Search = () => {
     return (
-        <div className="bg-white px-4 py-3 flex items-center mb-4 gap-x-3 rounded-lg">
+        <div className="bg-white px-4 py-3 flex items-center my-4 gap-x-3 rounded-lg">
             <img src={search} alt="search" />
             <input
                 type="text"
@@ -15,9 +17,23 @@ const Search = () => {
     );
 };
 
-const SuggestionTab = () => {
+const SuggestionTab = ({ showPostsFilter }) => {
+    const { filterReducer } = useContext(storeContext);
     return (
         <div className="aside-content mr-5 hidden lg:block">
+            {showPostsFilter === true ? (
+                <select
+                    onChange={(e) => filterReducer({ type: e.target.value })}
+                    className="mt-2 px-4 py-3 bg-white shadow-sm rounded-md"
+                >
+                    <option defaultValue={true} value="Latest">
+                        Latest Posts
+                    </option>
+                    <option value="Trending">Trending</option>
+                </select>
+            ) : (
+                ""
+            )}
             <Search />
             <div className="bg-white px-4 py-3 rounded-lg shadow-sm">
                 <h2 className="text-xl px-1 font-semibold mb-2.5">

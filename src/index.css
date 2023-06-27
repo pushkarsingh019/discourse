@@ -19,7 +19,7 @@
 
   .layout {
     display: grid;
-    grid-template-columns: 0.8fr 2fr 1fr;
+    grid-template-columns: 0.8fr 2fr 1.1fr;
     column-gap: 1.5rem;
     row-gap: 1.5rem;
     grid-template-areas: "header header header" "menu main-content aside-content";
