@@ -49,6 +49,7 @@ export const ContextProvider = ({children}) => {
                         const {user, accessToken, message} = data;
                         setUser(user);
                         setAccessToken(accessToken);
+                        toast.dismiss();
                         toast.success("Logged in", toastOptions)
                         return {status : "success" , message}
                     } catch (error) {
@@ -59,13 +60,14 @@ export const ContextProvider = ({children}) => {
                     }
                     break;
                 case 'signup':
-                    toast.loading("Creating your account");
+                    toast.loading("Creating your account", toastOptions);
                     try {
                         const {data} = await axios.post(`${backendUrl}/api/signup`, {username : action.data.username, email : action.data.email, password  : action.data.password, name : action.data.name});
                         const {user, accessToken, message} = data;
                         setUser(user);
                         setAccessToken(accessToken);
-                        toast.success("Account created")
+                        toast.dismiss();
+                        toast.success("Welcome to discourse!")
                         return {status : "success" , message : message}
                     } catch (error) {
                         toast.dismiss();
@@ -119,20 +121,21 @@ export const ContextProvider = ({children}) => {
                     try {
                         const {data} = await axios.get(`${backendUrl}/api/post`);
                         setPosts(data);
+                        toast.dismiss();
                     } catch (error) {
-                        toast.error("error fetching posts");
+                        toast.error("error fetching posts", toastOptions);
                         console.log(error);
                     }
                     break;
                 case 'get_post':
-                    toast.loading("fetching post" , {
+                    toast.loading("beep beep boop" , {
                         id : "post"
                     })
                     try {
                         const {data} = await axios.get(`${backendUrl}/api/post/${action.id}`);
                         setPost(data);
                         toast.dismiss();
-                        toast.success("post loaded", toastOptions);
+                        toast.success("Enjoy the discourse", toastOptions);
                     } catch (error) {
                         console.log(error);
                         toast.error("error fetching post")
@@ -205,7 +208,7 @@ export const ContextProvider = ({children}) => {
                             }
                         });
                         setUser(data);
-                        toast.success("removed bookmark", toastOptions)
+                        toast.success("removed from bookmarks", toastOptions)
                     } catch (error) {
                         console.log(error.message)
                     }
