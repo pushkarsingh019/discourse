@@ -222,6 +222,7 @@ export const ContextProvider = ({children}) => {
                 case 'logout':
                     setUser({});
                     setAccessToken();
+                    toast("Logged out", toastOptions);
                     break;
                 case 'get_profile':
                     try {
