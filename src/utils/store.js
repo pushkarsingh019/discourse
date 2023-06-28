@@ -272,7 +272,8 @@ export const ContextProvider = ({children}) => {
                             const {data} = await axios.put(`${backendUrl}/api/user/${action.id}` , {
                                 name : action.data.name,
                                 username : action.data.username,
-                                bio : action.data.bio
+                                bio : action.data.bio,
+                                portfolioLink : action.data.portfolioLink,
                             }, {
                                 headers : {
                                     authorization : accessToken
