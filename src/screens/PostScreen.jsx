@@ -7,6 +7,7 @@ import Header from "../components/Header";
 import Modal from "../components/Modal";
 import Comment from "../components/Comment";
 import { formatTime, getDate } from "../utils/compareTime";
+import { checkIsFollower } from "../utils/isFollower";
 
 import comment from "../assets/comment.svg";
 import like from "../assets/like.svg";
@@ -23,6 +24,7 @@ import deleteIcon from "../assets/deleteIcon.svg";
 import analytics from "../assets/analytics.svg";
 import CommentForm from "../components/CommentForm";
 import SuggestionTab from "../components/SuggestionTab";
+import { toast } from "react-hot-toast";
 
 const PostScreen = () => {
     const { id } = useParams();
@@ -61,7 +63,10 @@ const PostScreen = () => {
                 );
         } else {
             navigator.clipboard.writeText(`${origin}/post/${_id}`);
-            //TODO: add the toast to show, copy to clipboard...
+            toast.success("copied to clipboard", {
+                duration: 2000,
+                position: "top-center",
+            });
         }
     };
 
@@ -79,8 +84,10 @@ const PostScreen = () => {
                 <li
                     onClick={() => {
                         profileReducer({
-                            type: "unfollow",
-                            id: postToShow.authorDetails.id,
+                            type: checkIsFollower(user, authorDetails.id)
+                                ? "unfollow"
+                                : "follow",
+                            id: authorDetails.id,
                         });
                         setToggleModal(false);
                     }}
@@ -92,13 +99,16 @@ const PostScreen = () => {
                         className="w-6 h-6"
                     />
                     <p className="text-base font-medium">
-                        unfollow @ {postToShow.authorDetails.username}
+                        {checkIsFollower(user, authorDetails.id)
+                            ? "Unfollow"
+                            : "Follow"}{" "}
+                        @{postToShow.authorDetails.username}
                     </p>
                 </li>
                 <li
                     onClick={() => {
-                        shareHandler();
                         setToggleModal(false);
+                        shareHandler();
                     }}
                     className="flex gap-3 items-center py-2"
                 >
@@ -136,6 +146,7 @@ const PostScreen = () => {
                     onClick={() => {
                         postReducer({ type: "delete", id: postToShow._id });
                         setToggleModal(false);
+                        navigate("/home");
                     }}
                     className="flex gap-3 items-center py-2"
                 >

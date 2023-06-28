@@ -4,6 +4,7 @@ import { backendUrl } from "./config";
 import {toast} from "react-hot-toast"
 import { sortPostByTime } from "./compareTime";
 import { sortPostsByTrending } from "./compareTrending";
+import { isLoggedIn } from "./isLoggedIn";
 
 export const storeContext = createContext();
 
@@ -82,34 +83,41 @@ export const ContextProvider = ({children}) => {
         postReducer :  async (action) => {
             switch (action.type) {
                 case 'create_post':
-                    toast.loading("posting", toastOptions);
-                    try {
-                        let {data} = await axios.post(`${backendUrl}/api/post` , {post : action.data.post} , {
-                            headers : {
-                            authorization : accessToken
-                            }
-                        }, )
-                        setPosts(data);
-                        toast.dismiss();
-                        toast.success("posted", toastOptions);
-                    } catch (error) {
-                        console.log(error.message)
-                        toast.error("could not create your post :(")
+                    if (isLoggedIn(user)) {
+                        toast.loading("posting", toastOptions);
+                        try {
+                            let {data} = await axios.post(`${backendUrl}/api/post` , {post : action.data.post} , {
+                                headers : {
+                                authorization : accessToken
+                                }
+                            },)
+                            setPosts(data);
+                            toast.dismiss();
+                            toast.success("posted", toastOptions);
+                        } catch (error) {
+                            console.log(error.message)
+                            toast.error("could not create your post :(")
+                        }
+                    }
+                    else{
+                        toast.error("login first", toastOptions);
                     }
                     break;
                 case 'get_feed': 
-                    try {
-                        let {data} = await axios.get(`${backendUrl}/api/feed` , {headers : {authorization : accessToken}});
-                        let sortedFeed = [];
-                        if(sortCondition === "Latest"){
-                            sortedFeed = sortPostByTime(data);
+                    if(isLoggedIn(user)){
+                        try {
+                            let {data} = await axios.get(`${backendUrl}/api/feed` , {headers : {authorization : accessToken}});
+                            let sortedFeed = [];
+                            if(sortCondition === "Latest"){
+                                sortedFeed = sortPostByTime(data);
+                            }
+                            else{
+                                sortedFeed = sortPostsByTrending(data);
+                            }
+                            setFeed(sortedFeed);
+                        } catch (error) {
+                            console.log(error.message);
                         }
-                        else{
-                            sortedFeed = sortPostsByTrending(data);
-                        }
-                        setFeed(sortedFeed);
-                    } catch (error) {
-                        console.log(error.message);
                     }
                     break;
                 case 'fetch_posts':
@@ -142,31 +150,41 @@ export const ContextProvider = ({children}) => {
                     }
                     break;
                 case 'delete':
-                    try {
-                        let {data} = await axios.delete(`${backendUrl}/api/post/${action.id}`, {
-                            headers : {
-                                authorization : accessToken
-                            }
-                        });
-                        setPosts(data)
-                        toast.success("post deleted", toastOptions);
-                    } catch (error) {
-                        console.log(error.message)
+                    if(isLoggedIn(user)){
+                        try {
+                            let {data} = await axios.delete(`${backendUrl}/api/post/${action.id}`, {
+                                headers : {
+                                    authorization : accessToken
+                                }
+                            });
+                            setPosts(data)
+                            toast.success("post deleted", toastOptions);
+                        } catch (error) {
+                            console.log(error.message)
+                        }
+                    }
+                    else{
+                        toast.error("login first", toastOptions);
                     }
                     break;
                 case 'edit':
-                    toast.loading("editing post")
-                    try {
-                        await axios.put(`${backendUrl}/api/post/${action.id}`, {post : action.post}, {
-                            headers : {
-                                authorization : accessToken
-                            }
-                        });
-                        toast.dismiss();
-                        toast.success("post edited");
-                    } catch (error) {
-                        console.log(error.message)
-                        toast.error("error..")
+                    if(isLoggedIn(user)){
+                        toast.loading("editing post")
+                        try {
+                            await axios.put(`${backendUrl}/api/post/${action.id}`, {post : action.post}, {
+                                headers : {
+                                    authorization : accessToken
+                                }
+                            });
+                            toast.dismiss();
+                            toast.success("post edited");
+                        } catch (error) {
+                            console.log(error.message)
+                            toast.error("error..")
+                        }
+                    }
+                    else{
+                        toast.error("login first", toastOptions)
                     }
                     break;
                 default:
@@ -176,41 +194,56 @@ export const ContextProvider = ({children}) => {
         postsInteractionReducer  : async (action) => {
             switch (action.type) {
                 case "like":
-                    try {
-                        let {data} = await axios.get(`${backendUrl}/api/post/like/${action.id}`, {
-                            headers : {
-                                authorization : accessToken
-                            }
-                        });
-                        setPosts(data)
-                    } catch (error) {
-                        console.log(error.message)
+                    if(isLoggedIn(user)){
+                        try {
+                            let {data} = await axios.get(`${backendUrl}/api/post/like/${action.id}`, {
+                                headers : {
+                                    authorization : accessToken
+                                }
+                            });
+                            setPosts(data)
+                        } catch (error) {
+                            console.log(error.message)
+                        }
+                    }
+                    else{
+                        toast.error("login first", toastOptions)
                     }
                     break;
                 case "bookmark":
-                    try {
-                        let {data} = await axios.get(`${backendUrl}/api/post/bookmark/${action.id}`, {
-                            headers : {
-                                authorization : accessToken
-                            }
-                        });
-                        setUser(data)
-                        toast.success("post bookmarked", toastOptions)
-                    } catch (error) {
-                        console.log(error.message)
+                    if(isLoggedIn(user)){
+                        try {
+                            let {data} = await axios.get(`${backendUrl}/api/post/bookmark/${action.id}`, {
+                                headers : {
+                                    authorization : accessToken
+                                }
+                            });
+                            setUser(data)
+                            toast.success("post bookmarked", toastOptions)
+                        } catch (error) {
+                            console.log(error.message)
+                        }
+                    }
+                    else{
+                        toast.error("login first", toastOptions)
                     }
                     break;
                 case "remove_bookmark":
-                    try {
-                        let {data} = await axios.delete(`${backendUrl}/api/post/bookmark/${action.id}`, {
-                            headers : {
-                                authorization : accessToken
-                            }
-                        });
-                        setUser(data);
-                        toast.success("removed from bookmarks", toastOptions)
-                    } catch (error) {
-                        console.log(error.message)
+                    if(isLoggedIn(user)){
+                        try {
+                            let {data} = await axios.delete(`${backendUrl}/api/post/bookmark/${action.id}`, {
+                                headers : {
+                                    authorization : accessToken
+                                }
+                            });
+                            setUser(data);
+                            toast.success("removed from bookmarks", toastOptions)
+                        } catch (error) {
+                            console.log(error.message)
+                        }
+                    }
+                    else{
+                        toast.error("login first", toastOptions)
                     }
                     break;
                 default:
@@ -233,22 +266,27 @@ export const ContextProvider = ({children}) => {
                     }
                     break; 
                 case 'update_profile':
-                    toast.loading(`loading ${user.username} 2.0`)
-                    try {
-                        const {data} = await axios.put(`${backendUrl}/api/user/${action.id}` , {
-                            name : action.data.name,
-                            username : action.data.username,
-                            bio : action.data.bio
-                        }, {
-                            headers : {
-                                authorization : accessToken
-                            }
-                        });
-                        setUser(data)
-                        toast.dismiss();
-                        toast.success("profile updated", toastOptions);
-                    } catch (error) {
-                        console.log(error.message)
+                    if(isLoggedIn(user)){
+                        toast.loading(`loading ${user.username} 2.0`)
+                        try {
+                            const {data} = await axios.put(`${backendUrl}/api/user/${action.id}` , {
+                                name : action.data.name,
+                                username : action.data.username,
+                                bio : action.data.bio
+                            }, {
+                                headers : {
+                                    authorization : accessToken
+                                }
+                            });
+                            setUser(data)
+                            toast.dismiss();
+                            toast.success("profile updated", toastOptions);
+                        } catch (error) {
+                            console.log(error.message)
+                        }
+                    }
+                    else{
+                        toast.error("login first", toastOptions)
                     }
                     break;
                 case 'follow':
@@ -306,25 +344,29 @@ export const ContextProvider = ({children}) => {
         commentsReducer : async (action) => {
             switch (action.type) {
                 case 'new_comment':
-                    toast.loading("commenting...")
-                    try {
-                        let {data} = await axios.post(`${backendUrl}/api/post/comment` , {
-                            comment : action.comment,
-                            postId : action.id
-                        }, {
-                            headers : {
-                                authorization : accessToken
-                            }
-                        });
-                        setPost(data);
-                        toast.dismiss();
-                        toast.success("comment added", toastOptions);
-                    } catch (error) {
-                        console.log(error.message)
-                        return
+                    if(isLoggedIn(user)){
+                        toast.loading("commenting...")
+                        try {
+                            let {data} = await axios.post(`${backendUrl}/api/post/comment` , {
+                                comment : action.comment,
+                                postId : action.id
+                            }, {
+                                headers : {
+                                    authorization : accessToken
+                                }
+                            });
+                            setPost(data);
+                            toast.dismiss();
+                            toast.success("comment added", toastOptions);
+                        } catch (error) {
+                            console.log(error.message)
+                            return
+                        }
+                    }
+                    else{
+                        toast.error("login first", toastOptions);
                     }
                     break;
-            
                 default:
                     break;
             }
