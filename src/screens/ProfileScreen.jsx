@@ -74,6 +74,16 @@ const ProfileScreen = () => {
                         <p className="text-base md:text-center md:px-4">
                             {user.bio}
                         </p>
+                        <p className="text-base md:text-center mt-2 md:mt-4">
+                            <a
+                                href={`https://${user.portfolioLink}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-sky-500 font-medium"
+                            >
+                                {user.portfolioLink}
+                            </a>
+                        </p>
                     </div>
                     <br />
                     <div className="flex items-center gap-x-4 md:justify-center md:px-2 md:py-2 md:bg-white">

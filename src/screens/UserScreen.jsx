@@ -12,16 +12,16 @@ import Menu from "../components/Menu";
 import Post from "../components/Post";
 import ErrorScreen from "./ErrorScreen";
 import SuggestionTab from "../components/SuggestionTab";
+import { toast } from "react-hot-toast";
 
 const UserScreen = () => {
     const { userId } = useParams();
     const [profile, setProfile] = useState();
-    const [loading, setLoading] = useState(false);
     const { posts, postReducer, profileReducer, user } =
         useContext(storeContext);
 
     const fetchUserData = async () => {
-        setLoading(true);
+        const toastId = toast.loading("loading");
         try {
             let { data } = await axios.get(
                 `${backendUrl}/api/profile/${userId}`
@@ -30,7 +30,7 @@ const UserScreen = () => {
         } catch (error) {
             console.log(error.message);
         } finally {
-            setLoading(false);
+            toast.dismiss(toastId);
         }
     };
 
@@ -59,14 +59,6 @@ const UserScreen = () => {
         // eslint-disable-next-line
     }, [user]);
 
-    if (loading === true) {
-        return (
-            <div className="flex h-screen justify-center items-center">
-                <p className="text-2xl">loading...</p>
-            </div>
-        );
-    }
-
     if (profile === undefined) {
         return <ErrorScreen />;
     }
@@ -76,7 +68,7 @@ const UserScreen = () => {
             <Header />
             <Menu />
             <FloatingCreateButton />
-            <main className="main-content">
+            <main className="main-content bg-white">
                 <div className="px-6 my-6">
                     <div className="flex gap-x-5 items-center md:flex-col md:items-center md:text-center md:gap-y-3">
                         <img
@@ -132,6 +124,16 @@ const UserScreen = () => {
                         </p>
                         <p className="text-base md:text-center md:px-4">
                             {profile.bio}
+                        </p>
+                        <p className="text-base md:text-center mt-2 md:mt-2">
+                            <a
+                                href={`https://${profile.portfolioLink}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-sky-500 font-medium"
+                            >
+                                {profile.portfolioLink}
+                            </a>
                         </p>
                     </div>
                     <br />

@@ -14,6 +14,7 @@ const EditProfile = () => {
         name: user.name,
         username: user.username,
         bio: user.bio,
+        portfolioLink: user.portfolioLink,
     });
     const navigate = useNavigate();
     useEffect(() => {
@@ -102,6 +103,24 @@ const EditProfile = () => {
                                 setFormData({
                                     ...formData,
                                     bio: event.target.value,
+                                })
+                            }
+                        />
+                    </div>
+                    <br />
+                    <div className="border px-1.5 py-1">
+                        <label className="text-sm text-gray-600">
+                            Portfolio Link
+                        </label>
+                        <br />
+                        <input
+                            type="text"
+                            className="w-full outline-none px-0.5 h-max"
+                            value={formData.portfolioLink}
+                            onChange={(event) =>
+                                setFormData({
+                                    ...formData,
+                                    portfolioLink: event.target.value,
                                 })
                             }
                         />
