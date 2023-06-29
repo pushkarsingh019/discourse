@@ -40,7 +40,7 @@ const ProfileScreen = () => {
                     {/* the profile icon and the name -- cta buttons */}
                     <div className="flex gap-x-5 items-stretch md:flex-col md:items-center md:text-center md:gap-y-3">
                         <img
-                            src="https://avatars.githubusercontent.com/u/94926273?v=4"
+                            src={user.avatar}
                             alt="avatar"
                             className="w-16 h-16 md:w-32 md:h-32 object-contain rounded-full md:text-center"
                         />

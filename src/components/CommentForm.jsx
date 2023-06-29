@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { storeContext } from "../utils/store";
 
 const CommentForm = ({ postId }) => {
-    const { commentsReducer } = useContext(storeContext);
+    const { commentsReducer, user } = useContext(storeContext);
     const [comment, setComment] = useState("");
 
     const postComment = () => {
@@ -18,7 +18,7 @@ const CommentForm = ({ postId }) => {
     return (
         <div className="flex items-center md:justify-between">
             <img
-                src="https://avatars.githubusercontent.com/u/94926273?v=4"
+                src={user.avatar}
                 alt="pushkar singh"
                 className="w-8 h-8 md:w-10 md:h-10 object-contain rounded-full mr-4 md:m-0"
             />

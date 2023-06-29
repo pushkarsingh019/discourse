@@ -5,17 +5,21 @@ import { storeContext } from "../utils/store";
 import MobileTopBar from "../components/MobileTopBar";
 import Header from "../components/Header";
 import goBack from "../assets/goBack.svg";
+import { useRef } from "react";
 
 const EditProfile = () => {
     const location = useLocation();
     const { userId } = location.state;
     const { profileReducer, user } = useContext(storeContext);
+    console.log(user.avatar);
     const [formData, setFormData] = useState({
         name: user.name,
         username: user.username,
         bio: user.bio,
         portfolioLink: user.portfolioLink,
     });
+    const [selectedImage, setSelectedImage] = useState(null);
+    const fileInputRef = useRef(null);
     const navigate = useNavigate();
     useEffect(() => {
         profileReducer({
@@ -26,10 +30,16 @@ const EditProfile = () => {
     }, []);
 
     const editProfileHandler = () => {
+        const imageData = new FormData();
+        imageData.append("image", selectedImage);
         profileReducer({
             type: "update_profile",
             data: formData,
             id: userId,
+        });
+        profileReducer({
+            type: "upload_profile_pic",
+            imageData: imageData,
         });
         navigate(-1);
     };
@@ -51,10 +61,29 @@ const EditProfile = () => {
                 </div>
                 <div className="px-4 mt-7">
                     <div className="flex justify-center items-center">
-                        <img
-                            src="https://avatars.githubusercontent.com/u/94926273?v=4"
-                            alt="avatar"
-                            className="w-28 text-center h-28  object-contain rounded-full mb-6 md:w-36 md:h-36"
+                        {selectedImage ? (
+                            <img
+                                onClick={() => fileInputRef.current.click()}
+                                src={URL.createObjectURL(selectedImage)}
+                                alt="profile"
+                                className="w-28 text-center h-28  object-contain rounded-full mb-6 md:w-36 md:h-36"
+                            />
+                        ) : (
+                            <img
+                                onClick={() => fileInputRef.current.click()}
+                                src={user.avatar}
+                                alt="profile"
+                                className="w-28 text-center h-28  object-contain rounded-full mb-6 md:w-36 md:h-36 bg-contain"
+                            />
+                        )}
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="/*"
+                            className="hidden hover:block"
+                            onChange={(e) =>
+                                setSelectedImage(e.target.files[0])
+                            }
                         />
                     </div>
                     <div className="border px-1.5 py-1">

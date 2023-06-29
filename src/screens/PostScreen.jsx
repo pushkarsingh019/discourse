@@ -220,7 +220,7 @@ const PostScreen = () => {
                             }
                         >
                             <img
-                                src="https://avatars.githubusercontent.com/u/94926273?v=4"
+                                src={authorDetails.image}
                                 alt="pushkar singh"
                                 className="w-11 h-11 object-contain rounded-full mr-3 md:w-14 md:h-14"
                             />

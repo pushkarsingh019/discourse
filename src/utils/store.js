@@ -265,6 +265,22 @@ export const ContextProvider = ({children}) => {
                         console.log(error.message)
                     }
                     break; 
+                case 'upload_profile_pic':
+                    toast.loading("updating profile ..");
+                    try {
+                        const response = await axios.post(`${backendUrl}/api/upload`, action.imageData, {
+                            headers: {
+                              authorization: accessToken
+                            }
+                          });
+                        const { data } = response;
+                        setUser(data);
+                        toast.dismiss();
+                        toast.success("profile updated")
+                    } catch (error) {
+                        console.log(error.message)
+                    }
+                    break;
                 case 'update_profile':
                     if(isLoggedIn(user)){
                         toast.loading(`loading ${user.username} 2.0`)
