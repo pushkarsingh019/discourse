@@ -55,11 +55,13 @@ const CreatePostScreen = () => {
                     </p>
                 </div>
                 <div className="flex items-start py-3 bg-white">
-                    <img
-                        src="https://avatars.githubusercontent.com/u/94926273?v=4"
-                        alt="pushkar singh"
-                        className="w-10 md:w-20 h-auto object-contain rounded-full pt-2 mr-3"
-                    />
+                    <div className="pt-2 mr-3">
+                        <img
+                            src={user.avatar}
+                            alt="pushkar singh"
+                            className="w-16 h-10 md:w-20 md:h-20 object-cover rounded-full"
+                        />
+                    </div>
                     <div className="flex flex-col justify-between">
                         <div className="pb-3">
                             <div className="pb-3">

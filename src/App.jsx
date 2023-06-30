@@ -19,6 +19,7 @@ import UserScreen from "./screens/UserScreen";
 // importing other components
 import RequiresAuth from "./utils/RequiresAuth";
 import { storeContext } from "./utils/store";
+import ImageUploader from "./components/ImageUploader";
 
 const App = () => {
     const { user } = useContext(storeContext);
@@ -81,6 +82,7 @@ const App = () => {
                 <Route path="/login" element={<LoginScreen />} />
                 <Route path="/signup" element={<SignupScreen />} />
                 <Route path="/post/:id" element={<PostScreen />} />
+                <Route path="/image" element={<ImageUploader />} />
                 <Route path="*" element={<ErrorScreen />} />
             </Routes>
         </BrowserRouter>

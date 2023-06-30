@@ -21,11 +21,13 @@ const CreatePost = () => {
     return (
         <main className="main-content px-6 py-2 pb-3  bg-white rounded-lg hidden md:block font-sans">
             <div className="flex items-start py-3">
-                <img
-                    src="https://avatars.githubusercontent.com/u/94926273?v=4"
-                    alt="pushkar singh"
-                    className="w-10 h-auto object-contain rounded-full pt-2 mr-3"
-                />
+                <div className="pt-2 mr-3">
+                    <img
+                        src={user.avatar}
+                        alt="pushkar singh"
+                        className="w-10 h-10 object-cover rounded-full"
+                    />
+                </div>
                 <div className="flex flex-col justify-between w-full">
                     <div className="pb-3">
                         <p className=" font-medium">{user.username}</p>

@@ -4,7 +4,7 @@ const ProfileSuggestionBox = ({ name, username, image, userId }) => {
             <img
                 src={image}
                 alt={name}
-                className="w-11 h-11 rounded-full object-contain"
+                className="w-11 h-11 rounded-full object-cover"
             />
             <div className="flex justify-between items-center w-full">
                 <div>

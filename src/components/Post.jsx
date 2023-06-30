@@ -30,6 +30,7 @@ const Post = ({
     time,
     username,
     name,
+    image,
 }) => {
     const { postsInteractionReducer, user, profileReducer, postReducer } =
         useContext(storeContext);
@@ -173,9 +174,9 @@ const Post = ({
                 </button>
             </Modal>
             <img
-                src="https://avatars.githubusercontent.com/u/94926273?v=4"
+                src={authorDetails.image}
                 alt="pushkar singh"
-                className="w-10 h-auto object-contain rounded-full mr-3 md:w-11"
+                className="w-10 h-10 object-cover rounded-full mr-3 md:w-11"
                 onClick={() => navigate(`/user/${username}`)}
             />
             <div className="flex flex-col justify-between w-full">
