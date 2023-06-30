@@ -5,6 +5,7 @@ import { storeContext } from "../utils/store";
 import MobileTopBar from "../components/MobileTopBar";
 import Header from "../components/Header";
 import goBack from "../assets/goBack.svg";
+import add_photo from "../assets/add_photo.svg";
 import { useRef } from "react";
 
 const EditProfile = () => {
@@ -60,22 +61,28 @@ const EditProfile = () => {
                     <h2 className="text-xl">Edit Profile</h2>
                 </div>
                 <div className="px-4 mt-7">
-                    <div className="flex justify-center items-center">
+                    <div className="flex justify-center items-center relative">
                         {selectedImage ? (
                             <img
                                 onClick={() => fileInputRef.current.click()}
                                 src={URL.createObjectURL(selectedImage)}
                                 alt="profile"
-                                className="w-28 text-center h-28  object-contain rounded-full mb-6 md:w-36 md:h-36"
+                                className="w-28 h-28 blur-[0.5px] object-cover rounded-full mb-6 md:w-36 md:h-36"
                             />
                         ) : (
                             <img
                                 onClick={() => fileInputRef.current.click()}
                                 src={user.avatar}
                                 alt="profile"
-                                className="w-28 text-center h-28  object-contain rounded-full mb-6 md:w-36 md:h-36 bg-contain"
+                                className="relative blur-[0.5px] hover:cursor-pointer w-28 h-28 object-cover rounded-full mb-6 md:w-36 md:h-36 bg-contain"
                             />
                         )}
+                        <img
+                            src={add_photo}
+                            onClick={() => fileInputRef.current.click()}
+                            alt="update profile photo"
+                            className="w-7 h-7 object-contain absolute top-11 md:top-14 shadow-lg hover:cursor-pointer"
+                        />
                         <input
                             ref={fileInputRef}
                             type="file"
@@ -86,6 +93,7 @@ const EditProfile = () => {
                             }
                         />
                     </div>
+
                     <div className="border px-1.5 py-1">
                         <label className="text-sm text-gray-600">Name</label>
                         <br />

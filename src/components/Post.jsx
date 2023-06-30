@@ -176,7 +176,7 @@ const Post = ({
             <img
                 src={authorDetails.image}
                 alt="pushkar singh"
-                className="w-10 h-10 object-contain rounded-full mr-3 md:w-11"
+                className="w-10 h-10 object-cover rounded-full mr-3 md:w-11"
                 onClick={() => navigate(`/user/${username}`)}
             />
             <div className="flex flex-col justify-between w-full">

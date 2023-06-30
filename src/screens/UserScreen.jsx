@@ -74,7 +74,7 @@ const UserScreen = () => {
                         <img
                             src={profile.avatar}
                             alt="avatar"
-                            className="w-16 h-16 md:w-32 md:h-32 object-contain rounded-full md:text-center"
+                            className="w-16 h-16 md:w-32 md:h-32 object-cover rounded-full md:text-center"
                         />
                         <div>
                             <div>

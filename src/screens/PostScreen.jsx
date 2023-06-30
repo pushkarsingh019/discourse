@@ -222,7 +222,7 @@ const PostScreen = () => {
                             <img
                                 src={authorDetails.image}
                                 alt="pushkar singh"
-                                className="w-11 h-11 object-contain rounded-full mr-3 md:w-14 md:h-14"
+                                className="w-11 h-11 object-cover rounded-full mr-3 md:w-14 md:h-14"
                             />
                             <div className="flex flex-col">
                                 <p className="text-lg font-medium">
