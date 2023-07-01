@@ -14,7 +14,7 @@ const Menu = () => {
     const { user } = useContext(storeContext);
     return (
         // <nav className=" menu flex justify-between items-center pb-2 pt-3 px-4 bg-gray-50 rounded-t-2xl bg-white-800 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-20 border-solid border border-black">
-        <nav className="menu md:h-screen shadow-sm backdrop-filter: blur(20px) bg-opacity-95 bg-gray-50 md:bg-gray-100 md:px-4 ">
+        <nav className="menu z-50 md:h-screen shadow-sm backdrop-filter: blur(20px) bg-opacity-95 bg-gray-50 md:bg-gray-100 md:px-4 ">
             <div
                 className="flex flex-col items-center md:flex-row md:px-3 md:py-2 md:mb-2 md:gap-x-2 md:hover:bg-white rounded-md md:hover:shadow-sm"
                 onClick={() => navigate(`/`)}
