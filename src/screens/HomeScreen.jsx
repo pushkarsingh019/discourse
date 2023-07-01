@@ -9,10 +9,12 @@ import FloatingCreateButton from "../components/FloatingCreateButton";
 import { useNavigate } from "react-router-dom";
 import MobileTopBar from "../components/MobileTopBar";
 import SuggestionTab from "../components/SuggestionTab";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 const HomeScreen = () => {
     const { feed, postReducer, sortCondition } = useContext(storeContext);
     const navigate = useNavigate();
+    const [parent] = useAutoAnimate();
 
     useEffect(() => {
         postReducer({
@@ -45,21 +47,23 @@ const HomeScreen = () => {
                         .
                     </p>
                 ) : (
-                    feed.map((post) => {
-                        return (
-                            <Post
-                                key={post._id}
-                                id={post._id}
-                                post={post.post}
-                                username={post.authorDetails.username}
-                                time={post.time}
-                                likes={post.likes}
-                                community={post.community}
-                                authorDetails={post.authorDetails}
-                                comments={post.comments}
-                            />
-                        );
-                    })
+                    <div ref={parent}>
+                        {feed.map((post) => {
+                            return (
+                                <Post
+                                    key={post._id}
+                                    id={post._id}
+                                    post={post.post}
+                                    username={post.authorDetails.username}
+                                    time={post.time}
+                                    likes={post.likes}
+                                    community={post.community}
+                                    authorDetails={post.authorDetails}
+                                    comments={post.comments}
+                                />
+                            );
+                        })}
+                    </div>
                 )}
             </main>
             <SuggestionTab showPostsFilter={true} />

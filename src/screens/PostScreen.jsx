@@ -25,6 +25,7 @@ import analytics from "../assets/analytics.svg";
 import CommentForm from "../components/CommentForm";
 import SuggestionTab from "../components/SuggestionTab";
 import { toast } from "react-hot-toast";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 const PostScreen = () => {
     const { id } = useParams();
@@ -39,6 +40,7 @@ const PostScreen = () => {
     const { _id, authorDetails, post, likes, comments, time } = postToShow;
     const navigate = useNavigate();
     const [isModalOpen, setToggleModal] = useState(false);
+    const [parent] = useAutoAnimate();
 
     const handleModalChange = (toggleState) => setToggleModal(toggleState);
 
@@ -315,15 +317,17 @@ const PostScreen = () => {
                     <hr />
                     <CommentForm postId={postToShow._id} />
                     <hr />
-                    {comments.reverse().map((comment) => {
-                        return (
-                            <Comment
-                                key={comment._id}
-                                text={comment.comment}
-                                username={comment.authorDetails.username}
-                            />
-                        );
-                    })}
+                    <div ref={parent} className="">
+                        {comments.reverse().map((comment) => {
+                            return (
+                                <Comment
+                                    key={comment._id}
+                                    text={comment.comment}
+                                    username={comment.authorDetails.username}
+                                />
+                            );
+                        })}
+                    </div>
                 </main>
                 <SuggestionTab />
             </section>

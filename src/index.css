@@ -8,6 +8,7 @@
   }
   .main-content {
     grid-area: main-content;
+    overflow: scroll;
   }
   .menu {
     grid-area: menu;
@@ -30,6 +31,7 @@
     .layout {
       display: block;
       background-color: white;
+      margin-bottom: 6rem;
     }
     .menu {
       display: flex;

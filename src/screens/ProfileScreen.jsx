@@ -8,11 +8,13 @@ import { useNavigate } from "react-router-dom";
 import MobileTopBar from "../components/MobileTopBar";
 import { useEffect } from "react";
 import SuggestionTab from "../components/SuggestionTab";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 const ProfileScreen = () => {
     const { profileReducer, user, posts, postReducer } =
         useContext(storeContext);
     const navigate = useNavigate();
+    const [parent] = useAutoAnimate();
 
     const editProfileHandler = () => {
         navigate(`/settings/edit-profile`, { state: { userId: user._id } });
@@ -38,12 +40,14 @@ const ProfileScreen = () => {
                 <MobileTopBar text={`Profile`} />
                 <div className="px-4 my-6">
                     {/* the profile icon and the name -- cta buttons */}
-                    <div className="flex gap-x-5 items-stretch md:flex-col md:items-center md:text-center md:gap-y-3">
-                        <img
-                            src={user.avatar}
-                            alt="avatar"
-                            className="w-16 h-16 md:w-32 md:h-32 object-cover rounded-full md:text-center"
-                        />
+                    <div className="flex gap-x-5 items-stretch md:flex-col md:items-center md:text-centermd:gap-y-3">
+                        <div className="mt-2">
+                            <img
+                                src={user.avatar}
+                                alt="avatar"
+                                className="w-16 h-16 md:w-32 md:h-32 object-cover rounded-full md:text-center"
+                            />
+                        </div>
                         <div>
                             <div>
                                 <p className="text-xl md:text-3xl font-medium my-2">
@@ -118,31 +122,35 @@ const ProfileScreen = () => {
                     <br />
                     <p className="text-lg font-medium mb-2">Posts</p>
                     {/* TODO : checking posts by mapping over all the posts on the platform is a shit way to do this, updtate the server.js file */}
-                    {posts.filter(
-                        (post) => post.authorDetails.id === user._id
-                    ) === 0 ? (
-                        <p>no posts yet</p>
-                    ) : (
-                        posts
-                            .filter(
-                                (post) => post.authorDetails.id === user._id
-                            )
-                            .map((post) => {
-                                return (
-                                    <Post
-                                        id={post._id}
-                                        key={post._id}
-                                        post={post.post}
-                                        username={post.authorDetails.username}
-                                        time={post.time}
-                                        likes={post.likes}
-                                        community={post.community}
-                                        authorDetails={post.authorDetails}
-                                        comments={post.comments}
-                                    />
-                                );
-                            })
-                    )}
+                    <div ref={parent}>
+                        {posts.filter(
+                            (post) => post.authorDetails.id === user._id
+                        ) === 0 ? (
+                            <p>no posts yet</p>
+                        ) : (
+                            posts
+                                .filter(
+                                    (post) => post.authorDetails.id === user._id
+                                )
+                                .map((post) => {
+                                    return (
+                                        <Post
+                                            id={post._id}
+                                            key={post._id}
+                                            post={post.post}
+                                            username={
+                                                post.authorDetails.username
+                                            }
+                                            time={post.time}
+                                            likes={post.likes}
+                                            community={post.community}
+                                            authorDetails={post.authorDetails}
+                                            comments={post.comments}
+                                        />
+                                    );
+                                })
+                        )}
+                    </div>
                 </div>
             </main>
             <SuggestionTab />
