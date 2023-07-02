@@ -50,7 +50,7 @@ const ProfileScreen = () => {
                         </div>
                         <div>
                             <div>
-                                <p className="text-xl md:text-3xl font-medium my-2">
+                                <p className="text-xl md:text-3xl font-medium my-2 text-center">
                                     {user.name}
                                 </p>
                             </div>
